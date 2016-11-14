@@ -1,0 +1,71 @@
+=encoding utf-8
+
+=head1 NAME
+
+Net::ACME - Client for the ACME protocol (e.g., Let’s Encrypt)
+
+=head1 SYNOPSIS
+
+    package MyACME::SomeService;
+
+    sub _HOST { }   #return the name of the ACME host
+
+    #See the examples/ directory in the distribution for usage.
+
+=head1 DESCRIPTION
+
+This module implements client logic for the ACME protocol,
+the system for automated issuance of SSL certificates used by Let’s Encrypt.
+
+The methods of this class return objects that correspond to the
+respective ACME resource:
+
+=over 4
+
+=item * C<register()>: C<Net::ACME::Registration>
+
+=item * C<start_domain_authz()>: C<Net::ACME::Authorization::Pending>
+
+=item * C<get_certificate()>: C<Net::ACME::Certificate> or C<Net::ACME::Certificate::Pending>
+
+=back
+
+=head1 EXAMPLES
+
+See the C<examples> directory in the distribution.
+
+=head1 TODO
+
+=over 4
+
+=item * Improve documentation
+
+=item * Port tests from original cPanel module. (The meaningful ones are highly
+dependent on cPanel’s testing framework.)
+
+=item * Support EC keys.
+
+=item * Test and support ACME v2 features (pending server support).
+
+=back
+
+=head1 THANKS
+
+=over 4
+
+=item * cPanel, Inc. for permission to adapt their ACME framework for
+public consumption.
+
+=item * Stephen Ludin for developing and maintaining C<Protocol::ACME>, from which
+this module took its inspiration.
+
+=back
+
+=head1 REPOSITORY
+
+L<https://github.com/FGasper/p5-Net-ACME>
+
+=head1 AUTHOR
+
+Felipe Gasper (FELIPE)
+
