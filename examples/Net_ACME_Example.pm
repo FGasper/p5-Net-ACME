@@ -77,7 +77,7 @@ sub do_example {
                     if ( $poll->status() eq 'invalid' ) {
                         my @failed = grep { $_->error() } $poll->challenges();
 
-                        print $_->error()->detail() for @failed;
+                        print $_->to_string() . $/ for @failed;
 
                         die "Failed authorization for “$domain”!$/";
                     }
