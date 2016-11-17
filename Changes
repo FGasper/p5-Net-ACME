@@ -2,3 +2,6 @@ Revision history for Perl module Net::ACME
 
 0.01 Mon Nov 14 18:20:51 2016
     - original port from cPanel
+
+0.02 Thu Nov 17 17:45:00 2016
+    - Remove CryptX dependency
