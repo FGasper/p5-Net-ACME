@@ -25,12 +25,10 @@ topic-specific modules rather than this “catch-all” one.
 use strict;
 use warnings;
 
-use Crypt::Format  ();
-use Crypt::PK::RSA ();
-
 use MIME::Base64 ();
 *_to_base64url = \&MIME::Base64::encode_base64url;
 
+use Net::ACME::Crypt ();
 use Net::ACME::X ();
 
 my %KEY_OBJ_CACHE;
@@ -66,24 +64,15 @@ sub verify_token {
 }
 
 sub get_jwk_data {
-    my ($key_pem) = @_;
+    my ($key_pem_or_der) = @_;
 
-    #The “1” makes it give a hashref rather than JSON.
-    return _get_key_obj($key_pem)->export_key_jwk( 'public', 1 );
+    return Net::ACME::Crypt::get_rsa_public_jwk($key_pem_or_der);
 }
 
 sub get_jwk_thumbprint {
     my ($key_jwk) = @_;
 
-    return Crypt::PK::RSA->new( {%$key_jwk} )->export_key_jwk_thumbprint('SHA256');
-}
-
-#----------------------------------------------------------------------
-
-sub _get_key_obj {
-    my ($key_pem) = @_;
-
-    return $KEY_OBJ_CACHE{ Crypt::Format::pem2der($key_pem) } ||= Crypt::PK::RSA->new( \$key_pem );
+    return Net::ACME::Crypt::get_rsa_jwk_thumbprint( $key_jwk );
 }
 
 1;

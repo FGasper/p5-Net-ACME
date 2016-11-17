@@ -36,6 +36,19 @@ respective ACME resource:
 
 See the C<examples> directory in the distribution.
 
+=head1 WHY USE THIS MODULE?
+
+=over 4
+
+=item * Well-defined object system, including typed exceptions.
+
+=item * Based on cPanel’s widely used Let’s Encrypt plugin.
+
+=item * All non-core dependencies are pure Perl, so it should run anywhere
+that Perl runs.
+
+=back
+
 =head1 TODO
 
 =over 4
@@ -60,6 +73,20 @@ public consumption.
 
 =item * Stephen Ludin for developing and maintaining C<Protocol::ACME>, from which
 this module took its inspiration.
+
+=back
+
+=head1 SEE ALSO
+
+I am aware of the following additional CPAN modules that implement this protocol:
+
+=over 4
+
+=item * L<Protocol::ACME>
+
+=item * L<Crypt::LE>
+
+=item * L<WWW::LetsEncrypt>
 
 =back
 
