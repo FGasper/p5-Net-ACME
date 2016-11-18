@@ -32,9 +32,9 @@ something to accommodate.
 use strict;
 use warnings;
 
-use Crypt::JWT ();
-use JSON       ();
+use JSON ();
 
+use Net::ACME::Crypt          ();
 use Net::ACME::Error          ();
 use Net::ACME::HTTP_Tiny      ();
 use Net::ACME::HTTP::Response ();
@@ -174,9 +174,8 @@ sub _create_jws {
 
     die "Need a nonce before JWS can be created!" if !$self->{'_last_nonce'};
 
-    return Crypt::JWT::encode_jwt(
-        alg           => 'RS256',
-        key           => \$self->{'_acme_key'},
+    return Net::ACME::Crypt::create_rs256_jwt(
+        key           => $self->{'_acme_key'},
         extra_headers => {
             nonce => $self->{'_last_nonce'},
             jwk   => Net::ACME::Utils::get_jwk_data( $self->{'_acme_key'} ),

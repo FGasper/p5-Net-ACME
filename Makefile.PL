@@ -21,6 +21,10 @@ WriteMakefile(
         'MIME::Base64'             => 3.11,
         'Types::Serialiser'        => 1.0,
 
+        #The only non-core, non-pure-Perl dependency.
+        #TODO: Find a way to replace it with pure Perl.
+        'Crypt::OpenSSL::RSA'      => 0.01,
+
         #XXX Get rid!!
         'Class::Accessor' => 0.34,
     },

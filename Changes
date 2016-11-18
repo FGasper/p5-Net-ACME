@@ -5,3 +5,6 @@ Revision history for Perl module Net::ACME
 
 0.02 Thu Nov 17 17:45:00 2016
     - Remove CryptX dependency
+
+0.03 Thu Nov 17 18:27:00 2016
+    - Fix broken Crypt::JWT dependency; use Crypt::OpenSSL::RSA
