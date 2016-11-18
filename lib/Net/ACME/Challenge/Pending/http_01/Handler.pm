@@ -23,10 +23,11 @@ see C<Net::ACME::Challenge>.
 use strict;
 use warnings;
 
-#TODO: Replace with IO::Die once it’s fixed on El Capitan.
+#TODO: Replace with IO::Die once it’s fixed in 5.24.
 use autodie;
 
-use Errno;
+use Errno      ();
+use File::Spec ();
 
 use Net::ACME::Constants ();
 
@@ -86,8 +87,15 @@ sub _mkdir_if_not_exists {
 
     local $@;
     local ( $!, $^E );
-    eval { mkdir $path };
-    die if $@ && $@->errno() ne Errno::EEXIST();
+
+    my @ppath = File::Spec->splitdir($path);
+    pop @ppath;
+    my $ppath_str = File::Spec->catdir(@ppath);
+
+    for my $p ($ppath, $path) {
+        eval { mkdir $p };
+        die if $@ && $@->errno() != Errno::EEXIST();
+    }
 
     return;
 }
