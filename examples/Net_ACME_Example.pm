@@ -58,8 +58,6 @@ sub do_example {
     for my $domain (@domains) {
         my $authz_p = $acme->start_domain_authz($domain);
 
-        #Currently “http-01” challenges are the only ones this module
-        #deals with, so they’re the only ones we bother returning.
         for my $cmb_ar ( $authz_p->combinations() ) {
 
             my @challenges = $handle_combination_cr->( $domain, $cmb_ar, $reg );
@@ -100,10 +98,7 @@ sub do_example {
         $cert = $cert->poll() || $cert;
     }
 
-    my $cert_pem = $cert->pem();
-
-    print "$cert_key_pem$/";
-    print "$cert_pem$/";
+    print map { "$_$/" } $cert_key_pem, $cert->pem(), $cert->issuers_pem();
 
     return;
 }

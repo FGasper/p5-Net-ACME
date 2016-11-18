@@ -12,7 +12,7 @@ Net::ACME - Client for the ACME protocol (e.g., Let’s Encrypt)
 
     sub _HOST { }   #return the name of the ACME host
 
-    #See the examples/ directory in the distribution for usage.
+    #See below for full examples.
 
 =head1 DESCRIPTION
 
@@ -44,10 +44,79 @@ See the C<examples> directory in the distribution.
 
 =item * Based on cPanel’s widely used Let’s Encrypt plugin.
 
-=item * All non-core dependencies are pure Perl, so it should run anywhere
-that Perl runs.
+=item * Only one non-core, non-pure-Perl dependency (L<Crypt::OpenSSL::RSA>),
+and there’s a fallback to the system C<openssl> binary if that module isn’t
+available.
 
 =back
+
+=head1 EXAMPLE: REGISTRATION
+
+    my $tos_url = Net::ACME::LetsEncrypt->get_terms_of_service();
+
+    my $acme = Net::ACME::LetsEncrypt->new( key => $reg_rsa_pem );
+
+    #Use this method any time you want to update contact information,
+    #not just when you set up a new account.
+    my $reg = $acme->register('mailto:who.am@i.tld', 'mailto:who@else.tld');
+
+    $acme->accept_tos( $reg->uri(), $tos_url );
+
+=head1 EXAMPLE: DOMAIN AUTHORIZATION & CERTIFICATE PROCUREMENT
+
+    for my $domain (@domains) {
+        my $authz_p = $acme->start_domain_authz($domain);
+
+        for my $cmb_ar ( $authz_p->combinations() ) {
+
+            #$cmb_ar is a set of challenges that the ACME server will
+            #accept as proof of domain control. As of November 2016, these
+            #sets all contain exactly one challenge each: “http-01”, etc.
+
+            #At this point, you examine $cmb_ar and determine if this
+            #combination is one that you’re interested in. You might try
+            #something like:
+            #
+            #   next if @$cmb_ar > 1;
+            #   next if $cmb_ar->[0]{'type'} ne 'http-01';
+
+            #Once you’ve examined $cmb_ar and set up the appropriate response,
+            #it’s time to tell the ACME server to send its challenge query.
+            $acme->do_challenge($_) for @challenges;
+
+            while (1) {
+                if ( $authz_p->is_time_to_poll() ) {
+                    my $poll = $authz_p->poll();
+
+                    last if $poll->status() eq 'valid';
+
+                    if ( $poll->status() eq 'invalid' ) {
+                        my @failed = grep { $_->error() } $poll->challenges();
+
+                        warn $_->to_string() . $/ for @failed;
+
+                        die "Failed authorization for “$domain”!";
+                    }
+
+                }
+
+                sleep 1;
+            }
+        }
+    }
+
+    #Make a key and CSR.
+    #Creation of CSRs is well-documented so won’t be discussed here.
+
+    my $cert = $acme->get_certificate($csr_pem);
+
+    #This shouldn’t actually be necessary for Let’s Encrypt,
+    #but the ACME protocol describes it.
+    while ( !$cert->pem() ) {
+        sleep 1;
+        next if !$cert->is_time_to_poll();
+        $cert = $cert->poll() || $cert;
+    }
 
 =head1 TODO
 
