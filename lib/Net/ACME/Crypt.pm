@@ -11,6 +11,7 @@ use warnings;
 
 use Crypt::RSA::Parse ();
 use Digest::SHA       ();
+use File::Spec        ();
 use JSON              ();
 use Math::BigInt      ();
 use MIME::Base64      ();
