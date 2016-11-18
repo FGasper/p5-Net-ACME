@@ -111,7 +111,7 @@ sub combinations {
 sub _handle_non_202_poll {
     my ( $self, $resp ) = @_;
 
-    $resp->die_because_unexpected if $resp->status() != 200;
+    $resp->die_because_unexpected() if $resp->status() != 200;
 
     my $payload = $resp->content_struct();
 

@@ -119,7 +119,7 @@ sub _try_to_load_module {
 sub _module_path {
     my ($module) = @_;
 
-    return File::Spec::catfile( split m<::>, $module ) . '.pm';
+    return File::Spec->catfile( split m<::>, $module ) . '.pm';
 }
 
 sub _sign_with_key_via_openssl_binary {

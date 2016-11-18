@@ -57,7 +57,7 @@ sub new {
             my $challenge = $opts{'challenges'}[$c];
 
             if ( !UNIVERSAL::isa( $challenge, $CHALLENGE_CLASS ) ) {
-                die Net::ACME::X->create( 'InvalidParameter', "“challenges” index $c ($challenge) is not an instance of “$CHALLENGE_CLASS”!" );
+                die Net::ACME::X::create( 'InvalidParameter', "“challenges” index $c ($challenge) is not an instance of “$CHALLENGE_CLASS”!" );
             }
         }
     }

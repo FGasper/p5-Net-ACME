@@ -37,6 +37,7 @@ WriteMakefile(
     TEST_REQUIRES => {
         'Test::Class'     => 0.4,
         'Test::More'      => 1.0,
+        'Test::Deep'      => 0,
         'Test::Simple'    => 0.44,
         'Test::Exception' => 0.40,
     },
