@@ -68,7 +68,7 @@ sub test_get_rsa_public_jwk : Tests(1) {
             kty => "RSA",
             n => "uZA--KaL_kv59vWGmCkgOv96_fS9eCpnrCktib0WqDqtBTx77cLD0AMh3hfeh-6bxWlXhoYJNHShifuvhX9Q45jLzNHq_XBA7om-G2QMtDjuUiOprWOyfrpfBNlndG0oIZhe08vxbHAcZFR9mkN_T6YDUO-ATSfshyKUgIxSTzlJMQF0DPZ_imtkQ9B79JzwbH4D9uwXDtJOQdW2ibSgm0w9OjVTnIlz0pWTsmbiWOh2oc_-MNlbMpDvEiBuGu2in_obGEVwETD_Vqths0Zieb0JQQZtGTHPb2Kig_pQ8k5MO2V7ERMV_qQ8EGNLzHIP-8cjpD9oEwOueWkdKpBz0w",
         },
-        'get_rsa_public_jwk()',
+        'get_rsa_public_jwk() - PEM',
     );
 
     return;
@@ -80,10 +80,24 @@ sub test_get_rsa_jwk_thumbprint : Tests(1) {
     is(
         Net::ACME::Crypt::get_rsa_jwk_thumbprint( _KEY() ),
         'pBHLu_XpB5-lyvs2mXRHvQl0lrdQdYSpzSCEYfQe4yA',
-        'get_rsa_jwk_thumbprint()',
+        'get_rsa_jwk_thumbprint() - PEM',
     );
 
     return;
+}
+
+sub test_create_rs256_jwt : Tests(1) {
+    my $str = Net::ACME::Crypt::create_rs256_jwt(
+        key => _KEY(),
+        extra_headers => { foo => 123 },
+        payload => 'Just the facts, ma’am.',
+    );
+
+    is(
+        $str,
+        'eyJhbGciOiJSUzI1NiIsImZvbyI6MTIzfQ.SnVzdCB0aGUgZmFjdHMsIG1h4oCZYW0u.B7aFWFZxNoWYaJR7294nNDU_H29z4pJd8lMaEOl3ZlGkSy06bQ5dq0-ywTRguWuSMjxhEZAHBswDu0QNDz3vctrBt2e6_isd0w5pZ6egweS15dcwLiY28fllY1GAH2PxbBxxu5mCQ2UXhohA3RU9JJq4OPlOe90zA6SaWxdJFJOT0hefchy8xvddxvn-vJxnJjJf-se1MagxuvsK7svpF6ztcqtt3iOWcKY1Z8MHw-PFKVcdqIHyE-pe_6ZzyzK_ZIuCxPqhWPyFXY4C3k3kjDsCHqDu1ayT9SxPFk9TEv7Lw1_1mOhCM_dua7KRcT0ol4dxTOINGXu65giq4SBv3w',
+        'create_rs256_jwt()',
+    );
 }
 
 1;

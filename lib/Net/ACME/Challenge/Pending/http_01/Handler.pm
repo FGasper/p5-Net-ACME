@@ -92,7 +92,7 @@ sub _mkdir_if_not_exists {
     pop @ppath;
     my $ppath_str = File::Spec->catdir(@ppath);
 
-    for my $p ($ppath, $path) {
+    for my $p ($ppath_str, $path) {
         eval { mkdir $p };
         die if $@ && $@->errno() != Errno::EEXIST();
     }

@@ -10,14 +10,15 @@ use strict;
 use warnings;
 
 use Crypt::RSA::Parse ();
-use Digest::SHA ();
+use Digest::SHA       ();
+use JSON              ();
 use Math::BigInt      ();
 use MIME::Base64      ();
 
-#Our one non-core, non-pure-Perl dependency …
-use Crypt::OpenSSL::RSA ();
-
 *_encode_b64u = \&MIME::Base64::encode_base64url;
+
+#This can be set ahead of time if desired.
+our $OPENSSL_BIN;
 
 sub get_rsa_public_jwk {
     my ($pem_or_der) = @_;
@@ -59,9 +60,6 @@ sub create_rs256_jwt {
     # key
     die "JWS: missing 'key'" if !$args{key};
 
-    my $rsa = Crypt::OpenSSL::RSA->new_private_key($args{'key'});
-    $rsa->use_sha256_hash();
-
     my $payload = $args{payload};
     my $alg     = 'RS256';
 
@@ -80,12 +78,71 @@ sub create_rs256_jwt {
     my $json_header = _encode_json($header);
     my $b64u_header = _encode_b64u($json_header);
 
-    my $b64u_signature = _encode_b64u( $rsa->sign("$b64u_header.$b64u_payload") );
+    my $b64u_signature = _encode_b64u( _sign_with_key("$b64u_header.$b64u_payload", $args{key}) );
 
     return join('.', $b64u_header, $b64u_payload, $b64u_signature);
 }
 
 #----------------------------------------------------------------------
+
+my $_C_O_R_failed;
+
+sub _sign_with_key {
+    my ($msg, $key) = @_;
+
+    local $@;
+
+    if ( !$_C_O_R_failed && _try_to_load_module('Crypt::OpenSSL::RSA') ) {
+        my $rsa = Crypt::OpenSSL::RSA->new_private_key($key);
+        $rsa->use_sha256_hash();
+        return $rsa->sign($msg);
+    }
+
+    #No use in continuing to try.
+    $_C_O_R_failed = 1;
+
+    return _sign_with_key_via_openssl_binary($msg, $key);
+}
+
+sub _try_to_load_module {
+    my ($module) = @_;
+
+    my $path = _module_path($module);
+
+    return 0 if $INC{$path};
+
+    local $@;
+    return eval { require($path); 1 };
+}
+
+sub _module_path {
+    my ($module) = @_;
+
+    return File::Spec::catfile( split m<::>, $module ) . '.pm';
+}
+
+sub _sign_with_key_via_openssl_binary {
+    my ($msg, $key) = @_;
+
+    $OPENSSL_BIN ||= qx/which openssl/;
+    chomp $OPENSSL_BIN;
+    die "No Crypt::OpenSSL::RSA, and no OpenSSL binary!" if !$OPENSSL_BIN;
+
+    require File::Temp;
+
+    my ($fh, $path) = File::Temp::tempfile( CLEANUP => 1 );
+    print {$fh} $key or die "write($path): $!";
+    close $fh;
+
+    my ($d_fh, $d_path) = File::Temp::tempfile( CLEANUP => 1 );
+    print {$d_fh} $msg or die "write($d_path): $!";
+    close $d_fh;
+
+    my $sig = qx/$OPENSSL_BIN dgst -sha256 -sign $path $d_path/;
+    die if $?;
+
+    return $sig;
+}
 
 sub _encode_json {
     my ($payload) = @_;
@@ -118,7 +175,7 @@ sub _bigint_to_raw {
         substr($hex, 0, 0) = '0';
     }
 
-    return pack "H*", $hex;
+    return pack 'H*', $hex;
 }
 
 1;
