@@ -40,6 +40,8 @@ respective ACME resource:
 
 =item * Based on cPanel’s widely used Let’s Encrypt plugin.
 
+=item * Extensive test coverage.
+
 =item * Only one non-core, non-pure-Perl dependency (L<Crypt::OpenSSL::RSA>),
 and there’s a fallback to the system C<openssl> binary if that module isn’t
 available.
@@ -57,6 +59,12 @@ B<HTTPS options>: This module uses C<HTTP::Tiny> for its network operations.
 In some instances it is desirable to specify custom C<SSL_options> in that
 module’s constructor; to do this, populate
 C<@Net::ACME::HTTP_Tiny::SSL_OPTIONS>.
+
+=head1 URI vs. URL
+
+This module uses “uri” for ACME-related objects and “url” for
+HTTP-related ones. This apparent conflict is a result of maintaining
+consistency with both the ACME specification (“uri”) and L<HTTP::Tiny> (“url”).
 
 =head1 EXAMPLES
 
