@@ -1,4 +1,4 @@
-package t::Net::ACME::Authorization::Pending;
+package t::Net::ACME::Utils;
 
 use strict;
 use warnings;
