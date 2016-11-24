@@ -19,7 +19,7 @@ use MIME::Base64      ();
 *_encode_b64u = \&MIME::Base64::encode_base64url;
 
 #This can be set ahead of time if desired.
-our $OPENSSL_BIN;
+our $OPENSSL_BIN_PATH;
 
 sub get_rsa_public_jwk {
     my ($pem_or_der) = @_;
@@ -125,9 +125,9 @@ sub _module_path {
 sub _sign_with_key_via_openssl_binary {
     my ($msg, $key) = @_;
 
-    $OPENSSL_BIN ||= qx/which openssl/;
-    chomp $OPENSSL_BIN;
-    die "No Crypt::OpenSSL::RSA, and no OpenSSL binary!" if !$OPENSSL_BIN;
+    $OPENSSL_BIN_PATH ||= qx/which openssl/;
+    chomp $OPENSSL_BIN_PATH;
+    die "No Crypt::OpenSSL::RSA, and no OpenSSL binary!" if !$OPENSSL_BIN_PATH;
 
     require File::Temp;
 
@@ -139,7 +139,7 @@ sub _sign_with_key_via_openssl_binary {
     print {$d_fh} $msg or die "write($d_path): $!";
     close $d_fh;
 
-    my $sig = qx/$OPENSSL_BIN dgst -sha256 -sign $path $d_path/;
+    my $sig = qx/$OPENSSL_BIN_PATH dgst -sha256 -sign $path $d_path/;
     die if $?;
 
     return $sig;
