@@ -6,9 +6,12 @@ use autodie;
 
 our @ISA;
 
+use FindBin;
+use lib "$FindBin::Bin";
+
 BEGIN {
-    require "Net-ACME-Certificate-Pending-http_01.t";
-    unshift @ISA, 't::Net::ACME::Certificate::Pending::http_01';
+    require "Net-ACME-Challenge-Pending-http_01.t";
+    unshift @ISA, 't::Net::ACME::Challenge::Pending::http_01';
 }
 
 use Test::More;
@@ -20,4 +23,3 @@ if ( !caller ) {
 }
 
 1;
-

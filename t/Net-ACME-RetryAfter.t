@@ -6,6 +6,9 @@ use autodie;
 
 our @ISA;
 
+use FindBin;
+use lib "$FindBin::Bin";
+
 BEGIN {
     require "Net-ACME-Certificate-Pending.t";
     unshift @ISA, 't::Net::ACME::Certificate::Pending';

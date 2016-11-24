@@ -18,6 +18,9 @@ use Test::More;
 use Test::NoWarnings;
 use Test::Deep;
 
+use FindBin;
+use lib "$FindBin::Bin/lib";
+
 use Test::ACME ();
 
 use Net::ACME::Certificate::Pending ();

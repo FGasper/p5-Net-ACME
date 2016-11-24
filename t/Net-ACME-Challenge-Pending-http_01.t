@@ -1,4 +1,4 @@
-package t::Net::ACME::Challenge::Pending::HTTP_01;
+package t::Net::ACME::Challenge::Pending::http_01;
 
 use strict;
 use warnings;
