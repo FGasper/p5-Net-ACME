@@ -36,17 +36,26 @@ respective ACME resource:
 
 =over 4
 
-=item * Well-defined object system, including typed exceptions.
+=item * Closely based on cPanel’s widely used Let’s Encrypt plugin.
 
-=item * Based on cPanel’s widely used Let’s Encrypt plugin.
+=item * Thorough error-checking: any deviation from what the ACME protocol
+expects is reported immediately via an exception.
+
+=item * Well-defined object system, including typed, queryable exceptions.
 
 =item * Extensive test coverage.
 
+=item * Light memory footprint - no Moose/Moo/etc.
+
 =item * Only one non-core, non-pure-Perl dependency (L<Crypt::OpenSSL::RSA>),
 and there’s a fallback to the system C<openssl> binary if that module isn’t
-available.
+available. Net::ACME should run almost anywhere!
 
 =back
+
+=head1 STATUS
+
+This module is now well-tested and should be safe for use in your application.
 
 =head1 CUSTOMIZATION
 
@@ -183,7 +192,7 @@ I am aware of the following additional CPAN modules that implement this protocol
 
 =back
 
-=head1 REPOSITORY
+=head1 REPOSITORY (FEEDBACK/BUGS)
 
 L<https://github.com/FGasper/p5-Net-ACME>
 

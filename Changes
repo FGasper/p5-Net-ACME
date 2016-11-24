@@ -6,6 +6,12 @@ Revision history for Perl module Net::ACME
 0.02 Thu Nov 17 2016
 - Remove CryptX dependency
 
-0.03 Thu Nov 18 2016
+0.03 Fri Nov 18 2016
 - Fix broken Crypt::JWT dependency, make Crypt::OpenSSL::RSA optional
 - Make http-01 challenge local handler create .well-known directory
+
+0.09 Thu Nov 24 2016
+- Finish porting cPanel tests
+- Remove Class::Accessor dependency
+- Add more documentation
+- Need to test CPAN installation
