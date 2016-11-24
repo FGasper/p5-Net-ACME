@@ -32,10 +32,6 @@ respective ACME resource:
 
 =back
 
-=head1 EXAMPLES
-
-See the C<examples> directory in the distribution.
-
 =head1 WHY USE THIS MODULE?
 
 =over 4
@@ -49,6 +45,25 @@ and there’s a fallback to the system C<openssl> binary if that module isn’t
 available.
 
 =back
+
+=head1 CUSTOMIZATION
+
+B<OpenSSL>: This module will attempt to use L<Crypt::OpenSSL::RSA> if it is
+available; if not, it falls back to the C<openssl> binary. On most systems this
+should already be in the process’s search path, but if not, specify the binary’s
+location by setting C<$Net::ACME::Crypt::OPENSSL_BIN_PATH>.
+
+B<HTTPS options>: This module uses C<HTTP::Tiny> for its network operations.
+In some instances it is desirable to specify custom C<SSL_options> in that
+module’s constructor; to do this, populate
+C<@Net::ACME::HTTP_Tiny::SSL_OPTIONS>.
+
+=head1 EXAMPLES
+
+See the C<examples> directory in the distribution for complete, interactive
+example scripts that also illustrate a bit of how ACME works.
+
+See below for cut-paste-y examples.
 
 =head1 EXAMPLE: REGISTRATION
 
@@ -122,14 +137,11 @@ available.
 
 =over 4
 
-=item * Improve documentation
-
-=item * Port tests from original cPanel module. (The meaningful ones are highly
-dependent on cPanel’s testing framework.)
+=item * Find a way to sign with RSA in pure Perl.
 
 =item * Support EC keys.
 
-=item * Test and support ACME v2 features (pending server support).
+=item * Test and support more ACME v2 features (pending server support).
 
 =back
 
