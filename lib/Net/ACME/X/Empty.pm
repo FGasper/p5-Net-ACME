@@ -3,7 +3,7 @@ package Net::ACME::X::Empty;
 use strict;
 use warnings;
 
-use parent qw( Net::ACME::X::StringBase );
+use parent qw( Net::ACME::X::HashBase );
 
 sub new {
     my ( $class, $args_hr ) = @_;
@@ -17,7 +17,7 @@ sub new {
         $str = 'This value cannot be empty!';
     }
 
-    return $class->SUPER::new($str);
+    return $class->SUPER::new($str, $args_hr);
 }
 
 1;

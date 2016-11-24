@@ -25,20 +25,23 @@ use parent qw( Net::ACME::X::HashBase );
 
 # In a normal HTTP response, we don't necessarily know if the body is going
 # to be meaningful for display, so only include the first chunk.
-my $BODY_DISPLAY_SIZE = 1_024;
+#
+#(accessed from tests)
+use constant BODY_DISPLAY_SIZE => 1_024;
 
 #named args required:
 #
-#   error
 #   method
+#   reason
 #   url
+#   status
 #
 sub new {
     my ( $self, $args_hr ) = @_;
 
     my $content = $args_hr->{'content'};
-    if ( length($content) && length($content) > $BODY_DISPLAY_SIZE ) {
-        substr( $content, $BODY_DISPLAY_SIZE ) = '…';
+    if ( length($content) && length($content) > BODY_DISPLAY_SIZE() ) {
+        substr( $content, BODY_DISPLAY_SIZE() ) = '…';
     }
 
     $content ||= q<>;
