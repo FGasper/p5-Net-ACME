@@ -9,7 +9,7 @@ BEGIN {
     }
 }
 
-use base qw(
+use parent qw(
   Test::Class
 );
 
