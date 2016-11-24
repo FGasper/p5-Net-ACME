@@ -20,7 +20,7 @@ sub new {
     my ( $self, $args_hr ) = @_;
 
     return $self->SUPER::new(
-        "The [asis,ACME] function “$args_hr->{'url'}” indicated an error: “$args_hr->{'detail'}” ($args_hr->{'status'}, “$args_hr->{'reason'}”, $args_hr->{'type'}).",
+        "The ACME function “$args_hr->{'url'}” indicated an error: “$args_hr->{'detail'}” ($args_hr->{'status'}, “$args_hr->{'reason'}”, $args_hr->{'type'}).",
         $args_hr,
     );
 }

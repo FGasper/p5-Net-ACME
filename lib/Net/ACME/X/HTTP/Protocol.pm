@@ -37,9 +37,11 @@ sub new {
     my ( $self, $args_hr ) = @_;
 
     my $content = $args_hr->{'content'};
-    if ( length($content) > $BODY_DISPLAY_SIZE ) {
+    if ( length($content) && length($content) > $BODY_DISPLAY_SIZE ) {
         substr( $content, $BODY_DISPLAY_SIZE ) = '…';
     }
+
+    $content ||= q<>;
 
     return $self->SUPER::new(
         "The response to the HTTP “$args_hr->{'method'}” request from “$args_hr->{'url'}” indicated an error ($args_hr->{'status'}, $args_hr->{'reason'}): “$content”",

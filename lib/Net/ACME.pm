@@ -190,9 +190,6 @@ use Net::ACME::X                           ();
 our $VERSION;
 *VERSION = \$Net::ACME::Constants::VERSION;
 
-#https://rt.cpan.org/Ticket/Display.html?id=114027
-our $_ACCOMMODATE_RT114027 = 0;
-
 *_to_base64url = \&MIME::Base64::encode_base64url;
 
 sub new {
@@ -223,9 +220,7 @@ sub accept_tos {
         },
     );
 
-    if ( !$_ACCOMMODATE_RT114027 ) {
-        $resp->die_because_unexpected() if $resp->status() != 202;
-    }
+    $resp->die_because_unexpected() if $resp->status() != 202;
 
     return;
 }
@@ -247,7 +242,7 @@ sub register {
 
     $resp = $self->_post( 'new-reg', $payload );
 
-    if ( !$_ACCOMMODATE_RT114027 && $resp->status() != 201 ) {
+    if ( $resp->status() != 201 ) {
         $resp->die_because_unexpected();
     }
 
@@ -320,9 +315,7 @@ sub start_domain_authz {
         },
     );
 
-    if ( !$_ACCOMMODATE_RT114027 ) {
-        $resp->die_because_unexpected() if $resp->status() != 201;
-    }
+    $resp->die_because_unexpected() if $resp->status() != 201;
 
     my $content = $resp->content_struct();
 
