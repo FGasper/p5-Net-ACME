@@ -23,7 +23,6 @@ see C<Net::ACME::Challenge>.
 use strict;
 use warnings;
 
-#TODO: Replace with IO::Die once it’s fixed in 5.24.
 use autodie;
 
 use Errno      ();

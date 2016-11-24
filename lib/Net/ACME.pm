@@ -88,16 +88,20 @@ See below for cut-paste-y examples.
             #accept as proof of domain control. As of November 2016, these
             #sets all contain exactly one challenge each: “http-01”, etc.
 
+            #Each member of @$cmb_ar is an instance of
+            #Net::ACME::Challenge::Pending--maybe a subclass thereof such as
+            #Net::ACME::Challenge::Pending::http_01.
+
             #At this point, you examine $cmb_ar and determine if this
             #combination is one that you’re interested in. You might try
             #something like:
             #
             #   next if @$cmb_ar > 1;
-            #   next if $cmb_ar->[0]{'type'} ne 'http-01';
+            #   next if $cmb_ar->[0]->type() ne 'http-01';
 
-            #Once you’ve examined $cmb_ar and set up the appropriate response,
+            #Once you’ve examined $cmb_ar and set up the appropriate response(s),
             #it’s time to tell the ACME server to send its challenge query.
-            $acme->do_challenge($_) for @challenges;
+            $acme->do_challenge($_) for @$cmb_ar;
 
             while (1) {
                 if ( $authz_p->is_time_to_poll() ) {
@@ -331,12 +335,6 @@ sub start_domain_authz {
 
     my $content = $resp->content_struct();
 
-    #my $http_challenge_index = _get_http_challenge_index($content);
-    #
-    #_validate_combinations_for_http_only( $content, $http_challenge_index );
-    #
-    #my $http_challenge_hr = $content->{'challenges'}[$http_challenge_index];
-
     return Net::ACME::Authorization::Pending->new(
         uri          => $resp->header('location'),
         combinations => $content->{'combinations'},
@@ -467,58 +465,6 @@ sub _set_ua {
     $self->{'_ua'} = Net::ACME::HTTP->new(
         key => $self->{'_key'},
     );
-
-    return;
-}
-
-#Find the challenge index for HTTP
-sub _get_http_challenge_index {
-    my ($content) = @_;
-
-    my $http_challenge_index;
-
-    #For now, we do this simply by just hard-coding logic
-    #that only does one http-01 challenge.
-    my @challenges = @{ $content->{'challenges'} };
-    for ( 0 .. $#challenges ) {
-        if ( $challenges[$_]->{'type'} eq 'http-01' ) {
-            $http_challenge_index = $_;
-            last;
-        }
-    }
-
-    #This probably indicates an error in server configuration more than anything.
-    if ( !defined $http_challenge_index ) {
-        die Net::ACME::X->new( sprintf "This authorization does not accept [asis,HTTP] validation! (%s)", JSON::encode_json($content) );
-    }
-
-    return $http_challenge_index;
-}
-
-sub _validate_combinations_for_http_only {
-    my ( $content, $http_challenge_index ) = @_;
-
-    my $http_is_enough = ( @{ $content->{'challenges'} } == 1 );
-
-    if ( !$http_is_enough ) {
-
-        #Find a combination that consists exclusively of the number that
-        #corresponds to the HTTP challenge.
-        #NB: Per the ACME spec, no combinations means all challenges are required.
-        if ( $content->{'combinations'} ) {
-            for ( @{ $content->{'combinations'} } ) {
-                if ( "@$_" == $http_challenge_index ) {
-                    $http_is_enough = 1;
-                    last;
-                }
-            }
-        }
-    }
-
-    #This probably indicates an error in server configuration more than anything.
-    if ( !$http_is_enough ) {
-        die Net::ACME::X->new( sprintf "This authorization requires more than [asis,HTTP] validation! (%s)", JSON::encode_json($content) );
-    }
 
     return;
 }
