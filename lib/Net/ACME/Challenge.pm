@@ -29,14 +29,16 @@ To work with unhandled/unresolved challenges, see
 use strict;
 use warnings;
 
+use parent qw( Net::ACME::AccessorBase );
+
+use constant _ACCESSORS => qw( error status );
+
 use Net::ACME::X ();
 
 my $ERROR_CLASS;
-our @ISA;
 
 BEGIN {
     $ERROR_CLASS = 'Net::ACME::Error';
-    @ISA         = ( __PACKAGE__ . '::_Internal' );
 }
 
 sub new {
@@ -44,35 +46,14 @@ sub new {
 
     if ( $opts{'error'} && !UNIVERSAL::isa( $opts{'error'}, $ERROR_CLASS ) ) {
         die Net::ACME::X::create( 'InvalidParameter', "“error” must be an instance of “$ERROR_CLASS”, not “$opts{'error'}”!" );
-
-        #XXX
     }
 
-    return $class->SUPER::new( \%opts );
+    return $class->SUPER::new( %opts );
 }
 
 sub status {
     my ($self) = @_;
     return $self->SUPER::status() || 'pending';
-}
-
-#----------------------------------------------------------------------
-
-#Use this “wrapped” class so we can wrap the accessors.
-package Net::ACME::Challenge::_Internal;
-
-use strict;
-use warnings;
-
-use parent qw( Class::Accessor );
-
-BEGIN {
-    __PACKAGE__->mk_ro_accessors(
-        qw(
-          error
-          status
-          ),
-    );
 }
 
 1;

@@ -3,29 +3,23 @@ package Net::ACME::Registration;
 use strict;
 use warnings;
 
-use parent qw( Class::Accessor::Fast );
+use parent qw( Net::ACME::AccessorBase );
 
-my @params;
-
-BEGIN {
-
-    #Expand this as needed.
-    @params = qw(
-      key
-      uri
-      agreement
-      terms_of_service
-    );
-
-    __PACKAGE__->mk_ro_accessors(@params);
-}
+#Expand this as needed.
+use constant _ACCESSORS => qw(
+    agreement
+    key
+    terms_of_service
+    uri
+);
 
 sub new {
     my ( $class, %opts ) = @_;
 
-    %opts = map { ( $_ => $opts{$_} ) } @params;
+    #Silently (?) reject anything unfamiliar.
+    %opts = map { ( $_ => $opts{$_} ) } _ACCESSORS();
 
-    return $class->SUPER::new( \%opts );
+    return $class->SUPER::new( %opts );
 }
 
 1;

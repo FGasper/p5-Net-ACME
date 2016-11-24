@@ -15,14 +15,12 @@ WriteMakefile(
         'Call::Context'            => 0.02,
         'Crypt::Format'            => 0.06,
         'Crypt::RSA::Parse'        => 0.041,
+        'Digest::SHA'              => 0,
         'HTTP::Tiny'               => 0.058,
         'HTTP::Tiny::UA::Response' => 0.004,
         'JSON'                     => 2.9,
         'MIME::Base64'             => 3.11,
-        'Types::Serialiser'        => 1.0,
-
-        #XXX Get rid!!
-        'Class::Accessor' => 0.34,
+        'Types::Serialiser'        => 0,
     },
     META_MERGE => {
         'meta-spec' => { version => 2 },
@@ -40,5 +38,10 @@ WriteMakefile(
         'Test::Deep'      => 0,
         'Test::Simple'    => 0.44,
         'Test::Exception' => 0.40,
+
+        'Crypt::OpenSSL::Bignum' => 0,
+        'Crypt::OpenSSL::RSA' => 0,
+        'Crypt::JWT' => 0,
+        'Crypt::PK::RSA' => 0,
     },
 );

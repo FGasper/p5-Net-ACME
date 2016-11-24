@@ -28,11 +28,20 @@ which are described in more detail at L<https://tools.ietf.org/html/draft-ietf-a
 use strict;
 use warnings;
 
+use parent qw( Net::ACME::AccessorBase );
+
 #require.pm fails weirdly here.
-our ( @ISA, %TYPE_DESCRIPTION );
+our ( %TYPE_DESCRIPTION );
+
+use constant _ACCESSORS => qw(
+    detail
+    instance
+    status
+    title
+    type
+);
 
 BEGIN {
-    @ISA = ( __PACKAGE__ . '::_Internal' );
 
     #cf. https://ietf-wg-acme.github.io/acme/#errors
     %TYPE_DESCRIPTION = (
@@ -52,12 +61,6 @@ BEGIN {
         unsupportedIdentifier => 'Identifier is not supported, but may be in the future',
         agreementRequired     => 'The client must agree to terms before proceeding',
     );
-}
-
-sub new {
-    my ( $class, %opts ) = @_;
-
-    return $class->SUPER::new( \%opts );
 }
 
 sub type {
@@ -97,28 +100,6 @@ sub to_string {
     }
 
     return $type;
-}
-
-#----------------------------------------------------------------------
-
-#Use this “wrapped” class so we can wrap the type() method.
-package Net::ACME::Error::_Internal;
-
-use strict;
-use warnings;
-
-use parent qw( Class::Accessor );
-
-BEGIN {
-    __PACKAGE__->mk_ro_accessors(
-        qw(
-          type
-          title
-          status
-          detail
-          instance
-          ),
-    );
 }
 
 1;
