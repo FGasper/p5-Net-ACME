@@ -188,6 +188,8 @@ I am aware of the following additional CPAN modules that implement this protocol
 
 =item * L<WWW::LetsEncrypt>
 
+=item * L<Mojo::ACME>
+
 =back
 
 =head1 REPOSITORY (FEEDBACK/BUGS)
