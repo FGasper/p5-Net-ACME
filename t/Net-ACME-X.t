@@ -103,7 +103,7 @@ sub test_Protocol : Tests(12) {
 
 sub test_UnexpectedResponse : Tests(8) {
     my %attrs = (
-        url => 'http://where',
+        uri => 'http://where',
         status => 274,
         reason => 'cuz Jersey',
     );

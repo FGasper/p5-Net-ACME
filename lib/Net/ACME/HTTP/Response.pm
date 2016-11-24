@@ -16,7 +16,7 @@ sub die_because_unexpected {
     die Net::ACME::X::create(
         'UnexpectedResponse',
         {
-            url     => $self->url(),
+            uri     => $self->url(),
             status  => $self->status(),
             reason  => $self->reason(),
             headers => $self->headers(),

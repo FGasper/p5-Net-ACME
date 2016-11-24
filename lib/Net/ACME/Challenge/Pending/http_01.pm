@@ -13,7 +13,7 @@ Net::ACME::Challenge::Pending::http_01 - unhandled http-01 challenge
     my $challenge = Net::ACME::Challenge::Pending::http_01->new(
 
         #i.e., from the ACME new-authz call
-        url => 'https://post/url/for/challenge',
+        uri => 'https://post/url/for/challenge',
         token => 'sdgflih4we',
     );
 

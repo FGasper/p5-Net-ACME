@@ -10,7 +10,7 @@ sub new {
 
     $class->_check_overload();
 
-    my %attrs = %$props_hr;
+    my %attrs = $props_hr ? %$props_hr : ();
 
     return bless [ $string, \%attrs ], $class;
 }
