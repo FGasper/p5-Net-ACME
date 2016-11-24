@@ -107,8 +107,7 @@ sub _request {
     if ($@) {
         my $exc = $@;
 
-        #XXX
-        if ( UNIVERSAL::isa( $exc, 'Net::ACME::X::HTTP::Protocol' ) ) {
+        if ( eval { $exc->isa('Net::ACME::X::HTTP::Protocol') } ) {
             my $nonce = $exc->get('headers')->{ $_NONCE_HEADER =~ tr<A-Z><a-z>r };
             $self->{'_last_nonce'} = $nonce if $nonce;
 
@@ -142,6 +141,7 @@ sub _request {
             );
         }
 
+        $@ = $exc;
         die;
     }
 

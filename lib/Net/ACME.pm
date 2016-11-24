@@ -376,8 +376,10 @@ sub start_domain_authz {
 sub delete_authz {
     my ( $self, $authz ) = @_;
 
+    local $@;
+
     #sanity
-    if ( !UNIVERSAL::isa( $authz, 'Net::ACME::Authorization::Pending' ) ) {
+    if ( !eval { $authz->isa('Net::ACME::Authorization::Pending') } ) {
         die "Must be a pending authz object, not “$authz”!";
     }
 

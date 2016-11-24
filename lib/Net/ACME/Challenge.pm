@@ -44,7 +44,9 @@ BEGIN {
 sub new {
     my ( $class, %opts ) = @_;
 
-    if ( $opts{'error'} && !UNIVERSAL::isa( $opts{'error'}, $ERROR_CLASS ) ) {
+    local $@;
+
+    if ( $opts{'error'} && !eval { $opts{'error'}->isa($ERROR_CLASS) } ) {
         die Net::ACME::X::create( 'InvalidParameter', "“error” must be an instance of “$ERROR_CLASS”, not “$opts{'error'}”!" );
     }
 
