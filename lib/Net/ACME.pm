@@ -47,14 +47,15 @@ expects is reported immediately via an exception.
 
 =item * Light memory footprint - no Moose/Moo/etc.
 
-=item * No careless overwriting of globals like C<$@> and C<$!>. (Hopefully
-your code isn’t susceptible to this anyway.) B<NOTE>: Perl 5.10 and earlier
-have a bug that basically requires overwriting C<$@>; see
-C<Net::ACME::EvalBug> for an example.
+=item * No careless overwriting of globals like C<$@>, C<$!> and C<$?>.
+(Hopefully your code isn’t susceptible to this anyway, but it’s just a good
+precaution.)
+B<NOTE>: Perl 5.10 and earlier have a bug that basically requires overwriting
+global C<$@>; see C<Net::ACME::EvalBug> for an example.
 
-=item * Only one non-core, non-pure-Perl dependency (L<Crypt::OpenSSL::RSA>),
-and there’s a fallback to the system C<openssl> binary if that module isn’t
-available. Net::ACME should run almost anywhere!
+=item * All dependencies are either core or pure Perl. For RSA crypto we use
+L<Crypt::OpenSSL::RSA> if it’s available, or the system’s C<openssl> binary.
+Net::ACME will run almost anywhere!
 
 =back
 

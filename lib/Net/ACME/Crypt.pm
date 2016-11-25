@@ -2,7 +2,7 @@ package Net::ACME::Crypt;
 
 #----------------------------------------------------------------------
 # This module exists because of a desire to do these computations
-# in pure Perl, for environments where a compiler may not be available.
+# in environments where a compiler may not be available.
 # (Otherwise, CryptX would be ideal.)
 #----------------------------------------------------------------------
 
@@ -56,7 +56,8 @@ sub get_rsa_jwk_thumbprint {
 }
 
 #Based on Crypt::JWT::encode_jwt(), but focused on this particular
-#protocol’s needs.
+#protocol’s needs. Note that UTF-8 will probably get mangled in here,
+#but that’s not a problem since ACME shouldn’t require sending raw UTF-8.
 sub create_rs256_jwt {
     my ( %args ) = @_;
 

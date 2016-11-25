@@ -21,3 +21,4 @@ Revision history for Perl module Net::ACME
 - Fix a clobber of $@
 - Prevent clobber of $?
 - Remove XS dependencies from tests.
+- Add missing File::Slurp test dependency to Makefile.PL
