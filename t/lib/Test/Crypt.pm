@@ -13,8 +13,9 @@ BEGIN {
     }
 }
 
-use Call::Context ();
 use Carp;
+
+use Call::Context ();
 use File::Temp ();
 use JSON ();
 use MIME::Base64 ();
@@ -46,7 +47,7 @@ sub decode_jwt {
 sub verify_rs256 {
     my ($key, $message, $signature) = @_;
 
-confess "No key!" if !$key;
+    confess "No key!" if !$key;
 
     local $@ if !Net::ACME::EvalBug::bug_exists();
 
