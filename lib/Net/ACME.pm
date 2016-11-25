@@ -208,6 +208,10 @@ L<https://github.com/FGasper/p5-Net-ACME>
 
 Felipe Gasper (FELIPE)
 
+=head1 LICENSE
+
+This module is licensed under the same terms as Perl.
+
 =cut
 
 use strict;

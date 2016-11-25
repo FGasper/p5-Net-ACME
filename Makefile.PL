@@ -9,6 +9,7 @@ WriteMakefile(
     AUTHOR       => 'Felipe Gasper (FELIPE)',
     ABSTRACT     => 'Client logic for the ACME protocol',
     LICENSE      => 'perl',
+    MIN_PERL_VERSION => '5.8.9',
     PREREQ_PM    => {
         'autodie'                  => 0,
         'constant'                 => 1.23,
