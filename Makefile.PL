@@ -34,6 +34,7 @@ WriteMakefile(
         },
     },
     TEST_REQUIRES => {
+        'File::Slurp'     => 0,
         'Test::Class'     => 0.4,
         'Test::More'      => 1.0,
         'Test::Deep'      => 0,

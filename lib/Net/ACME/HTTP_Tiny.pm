@@ -43,6 +43,7 @@ use parent qw( HTTP::Tiny );
 use HTTP::Tiny::UA::Response ();
 
 use Net::ACME::Constants ();
+use Net::ACME::EvalBug ();
 use Net::ACME::X         ();
 
 our $VERSION;
@@ -73,7 +74,7 @@ sub request {
     #HTTP::Tiny clobbers this. The clobbering is useless since the
     #error is in the $resp variable already. Clobbering also risks
     #action-at-a-distance problems, so prevent it here.
-    local $@;
+    local $@ if !Net::ACME::EvalBug::bug_exists();
 
     my $resp = $self->SUPER::request( $method, $url, $args_hr || () );
 

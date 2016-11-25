@@ -105,6 +105,7 @@ sub _request {
     local $@ if !Net::ACME::EvalBug::bug_exists();
 
     eval { $resp = $self->_ua_request( $type, @args ); };
+
     if ($@) {
         my $exc = $@;
 
