@@ -95,7 +95,8 @@ sub to_string {
         $type = sprintf "%s (%s)", $desc, $type;
     }
 
-    if ( length $self->detail() ) {
+    my $detail = $self->detail();
+    if ( defined $detail && length $detail ) {
         return sprintf "%s (%s)", $self->detail(), $type;
     }
 

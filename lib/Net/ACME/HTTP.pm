@@ -36,6 +36,7 @@ use JSON ();
 
 use Net::ACME::Crypt          ();
 use Net::ACME::Error          ();
+use Net::ACME::EvalBug ();
 use Net::ACME::HTTP_Tiny      ();
 use Net::ACME::HTTP::Response ();
 use Net::ACME::Utils          ();
@@ -101,7 +102,7 @@ sub _request {
 
     my $resp;
 
-    local $@;
+    local $@ if !Net::ACME::EvalBug::bug_exists();
 
     eval { $resp = $self->_ua_request( $type, @args ); };
     if ($@) {

@@ -10,6 +10,7 @@ WriteMakefile(
     ABSTRACT     => 'Client logic for the ACME protocol',
     LICENSE      => 'perl',
     PREREQ_PM    => {
+        'autodie'                  => 0,
         'constant'                 => 1.23,
         'parent'                   => 0.225,
         'Call::Context'            => 0.02,

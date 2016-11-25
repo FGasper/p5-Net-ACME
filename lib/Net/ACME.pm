@@ -47,6 +47,11 @@ expects is reported immediately via an exception.
 
 =item * Light memory footprint - no Moose/Moo/etc.
 
+=item * No careless overwriting of globals like C<$@> and C<$!>. (Hopefully
+your code isn’t susceptible to this anyway.) B<NOTE>: Perl 5.10 and earlier
+have a bug that basically requires overwriting C<$@>; see
+C<Net::ACME::EvalBug> for an example.
+
 =item * Only one non-core, non-pure-Perl dependency (L<Crypt::OpenSSL::RSA>),
 and there’s a fallback to the system C<openssl> binary if that module isn’t
 available. Net::ACME should run almost anywhere!
@@ -217,6 +222,7 @@ use Net::ACME::Certificate                 ();
 use Net::ACME::Certificate::Pending        ();
 use Net::ACME::Constants                   ();
 use Net::ACME::Challenge::Pending::http_01 ();
+use Net::ACME::EvalBug ();
 use Net::ACME::HTTP                        ();
 use Net::ACME::Registration                ();
 use Net::ACME::Utils                       ();
@@ -378,7 +384,7 @@ sub start_domain_authz {
 sub delete_authz {
     my ( $self, $authz ) = @_;
 
-    local $@;
+    local $@ if !Net::ACME::EvalBug::bug_exists();
 
     #sanity
     if ( !eval { $authz->isa('Net::ACME::Authorization::Pending') } ) {

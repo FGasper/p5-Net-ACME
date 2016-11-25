@@ -40,6 +40,7 @@ use warnings;
 
 use Call::Context ();
 
+use Net::ACME::EvalBug ();
 use Net::ACME::X ();
 
 my $CHALLENGE_CLASS = 'Net::ACME::Challenge';
@@ -52,7 +53,7 @@ sub new {
         _challenges => $opts{'challenges'},
     };
 
-    local $@;
+    local $@ if !Net::ACME::EvalBug::bug_exists();
 
     if ( $opts{'challenges'} ) {
         for my $c ( 0 .. $#{ $opts{'challenges'} } ) {

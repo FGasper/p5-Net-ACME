@@ -47,7 +47,7 @@ sub do_example {
         print 'Enter a domain for the certificate (or ENTER if you’re done): ';
         my $d = <STDIN>;
         chomp $d;
-        last if !length $d;
+        last if !defined $d || !length $d;
         push( @domains, $d );
     }
 

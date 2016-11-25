@@ -10,7 +10,7 @@ sub new {
 
     my $str;
 
-    if ( length $args_hr->{'name'} ) {
+    if ( defined $args_hr->{'name'} && length $args_hr->{'name'} ) {
         $str = "“$args_hr->{'name'}” cannot be empty!";
     }
     else {

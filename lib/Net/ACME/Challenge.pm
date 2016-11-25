@@ -33,6 +33,7 @@ use parent qw( Net::ACME::AccessorBase );
 
 use constant _ACCESSORS => qw( error status );
 
+use Net::ACME::EvalBug ();
 use Net::ACME::X ();
 
 my $ERROR_CLASS;
@@ -44,7 +45,7 @@ BEGIN {
 sub new {
     my ( $class, %opts ) = @_;
 
-    local $@;
+    local $@ if !Net::ACME::EvalBug::bug_exists();
 
     if ( $opts{'error'} && !eval { $opts{'error'}->isa($ERROR_CLASS) } ) {
         die Net::ACME::X::create( 'InvalidParameter', "“error” must be an instance of “$ERROR_CLASS”, not “$opts{'error'}”!" );

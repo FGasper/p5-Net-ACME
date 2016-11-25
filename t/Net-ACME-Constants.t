@@ -18,7 +18,6 @@ use Test::More;
 use Test::NoWarnings;
 use Test::Deep;
 use Test::Exception;
-use Test::Warn;
 
 use Net::ACME::Constants ();
 

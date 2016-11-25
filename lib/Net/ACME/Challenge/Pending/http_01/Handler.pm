@@ -29,6 +29,7 @@ use Errno      ();
 use File::Spec ();
 
 use Net::ACME::Constants ();
+use Net::ACME::EvalBug ();
 
 #docroot, token, key_authz
 sub new {
@@ -84,7 +85,8 @@ sub DESTROY {
 sub _mkdir_if_not_exists {
     my ($path) = @_;
 
-    local $@;
+    local $@ if !Net::ACME::EvalBug::bug_exists();
+
     local ( $!, $^E );
 
     my @ppath = File::Spec->splitdir($path);

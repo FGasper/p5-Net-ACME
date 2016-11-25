@@ -29,6 +29,7 @@ use MIME::Base64 ();
 *_to_base64url = \&MIME::Base64::encode_base64url;
 
 use Net::ACME::Crypt ();
+use Net::ACME::EvalBug ();
 use Net::ACME::X ();
 
 my %KEY_OBJ_CACHE;
@@ -41,11 +42,11 @@ END {
 sub verify_token {
     my ($token) = @_;
 
-    local $@;
+    local $@ if !Net::ACME::EvalBug::bug_exists();
+
     eval {
 
-        #XXX
-        die Net::ACME::X::create('Empty') if !length $token;
+        die Net::ACME::X::create('Empty') if !defined $token || !length $token;
         die Net::ACME::X::create('Empty') if $token =~ m<\A\s*\z>;
 
         if ( $token =~ m<[^0-9a-zA-Z_-]> ) {

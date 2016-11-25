@@ -40,7 +40,7 @@ sub new {
     my ( $self, $args_hr ) = @_;
 
     my $content = $args_hr->{'content'};
-    if ( length($content) && length($content) > BODY_DISPLAY_SIZE() ) {
+    if ( defined($content) && length($content) > BODY_DISPLAY_SIZE() ) {
         substr( $content, BODY_DISPLAY_SIZE() ) = '…';
     }
 

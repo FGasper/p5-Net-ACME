@@ -23,6 +23,7 @@ use JSON ();
 use Crypt::JWT               ();
 use HTTP::Tiny::UA::Response ();
 
+use Net::ACME::EvalBug ();
 use Net::ACME::HTTP ();
 
 use JSON      ();
@@ -163,7 +164,8 @@ sub test_get_and_post : Tests(8) {
 
     $ua_request_cr = sub { die $server_err };
 
-    local $@;
+    local $@ if !Net::ACME::EvalBug::bug_exists();
+
     eval { $ua->post( 'doesn’t matter', { foo => 123 } ) };
 
     $jwt = $request_args[2]->{'content'};
