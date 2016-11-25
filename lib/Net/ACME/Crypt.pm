@@ -151,6 +151,8 @@ sub _sign_with_key_via_openssl_binary {
 sub _encode_json {
     my ($payload) = @_;
 
+    #Always do a canonical encode so that we can test more easily.
+    #Note that JWS itself does NOT require this.
     return JSON->new()->canonical(1)->encode($payload);
 }
 

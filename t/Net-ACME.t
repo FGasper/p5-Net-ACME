@@ -23,7 +23,6 @@ use Test::Exception;
 
 use JSON ();
 
-use Crypt::JWT               ();
 use HTTP::Tiny ();
 use HTTP::Tiny::UA::Response ();
 
@@ -206,6 +205,7 @@ sub test_get_certificate : Tests(3) {
     );
 
     $self->_with_mocked_http_request(
+        _ACME_KEY(),
         \%endpoints,
         sub {
             my $acme     = _get_acme();
@@ -225,7 +225,7 @@ sub test_get_certificate : Tests(3) {
         },
     );
 
-    my @requests = $self->_get_rest_calls();
+    my @requests = $self->_get_rest_calls(_ACME_KEY());
 
     cmp_deeply(
         \@requests,
@@ -274,6 +274,7 @@ sub test_do_challenge : Tests(1) {
     );
 
     $self->_with_mocked_http_request(
+        _ACME_KEY(),
         {
             'get:directory' => sub { return $self->_server_send_directory() },
             'post:challenge/0' => sub {
@@ -286,7 +287,7 @@ sub test_do_challenge : Tests(1) {
         },
     );
 
-    my @requests = $self->_get_rest_calls();
+    my @requests = $self->_get_rest_calls(_ACME_KEY());
 
     cmp_deeply(
         \@requests,
@@ -331,6 +332,7 @@ sub test_delete_authz : Tests(1) {
     my $tempdir = File::Temp::tempdir(CLEANUP => 1);
 
     $self->_with_mocked_http_request(
+        _ACME_KEY(),
         {
             'get:directory' => sub { return $self->_server_send_directory() },
             'post:my_authz'  => sub {
@@ -400,6 +402,7 @@ sub test_start_domain_authz : Tests(3) {
     };
 
     $self->_with_mocked_http_request(
+        _ACME_KEY(),
         {
             'get:directory'                  => sub { return $self->_server_send_directory() },
             'post:mock-acme/mock-new-authz' => $mock_new_authz_cr,
@@ -421,7 +424,7 @@ sub test_start_domain_authz : Tests(3) {
         },
     );
 
-    my @requests = $self->_get_rest_calls();
+    my @requests = $self->_get_rest_calls(_ACME_KEY());
 
     cmp_deeply(
         \@requests,
@@ -456,6 +459,7 @@ sub test_registration : Tests(2) {
     my $terms = 'http://cp-terms';
 
     $self->_do_acme_server(
+        _ACME_KEY(),
         sub {
             my $acme = _get_acme();
 
@@ -479,7 +483,7 @@ sub test_registration : Tests(2) {
         },
     );
 
-    my @requests = $self->_get_rest_calls();
+    my @requests = $self->_get_rest_calls(_ACME_KEY());
 
     cmp_deeply(
         \@requests,

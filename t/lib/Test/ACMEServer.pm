@@ -10,9 +10,15 @@ use warnings;
 
 use parent qw( Test::Class );
 
-use Crypt::JWT ();
+use FindBin;
+use lib "$FindBin::Bin/lib";
+
 use File::Slurp ();
 use File::Temp ();
+
+use Call::Context ();
+
+use Test::Crypt ();
 
 sub _DIRECTORY {
     my $host = t::Net::ACME::MockService::_HOST();
@@ -26,18 +32,18 @@ sub _DIRECTORY {
 }
 
 sub _decode_jwt {
-    my ($jwt) = @_;
+    my ($jwt, $key) = @_;
 
-    die 'list!' if !wantarray;
+    Call::Context::must_be_list();
 
-    return Crypt::JWT::decode_jwt(
+    return Test::Crypt::decode_jwt(
+        key => $key,
         token         => $jwt,
-        decode_header => 1,
     );
 }
 
 sub _with_mocked_http_request {
-    my ($self, $endpoints_hr, $todo_as_client_cr ) = @_;
+    my ($self, $acme_key, $endpoints_hr, $todo_as_client_cr ) = @_;
 
     no warnings 'redefine';
     local *HTTP::Tiny::request = sub {
@@ -51,7 +57,7 @@ sub _with_mocked_http_request {
         my $longest = (sort { length $a <=> length $b } @matching_endpoints)[-1];
 
         my $postdata = $args_hr->{'content'};
-        my ( $header, $payload ) = $postdata ? _decode_jwt($postdata) : ();
+        my ( $header, $payload ) = $postdata ? _decode_jwt($postdata, $acme_key) : ();
 
         my $rest_calls_ar = $self->_load_file_json( $self->{'_rest_calls_file'} );
 
@@ -127,11 +133,12 @@ sub _load_file_json {
 #----------------------------------------------------------------------
 
 sub _do_acme_server {
-    my ( $self, $todo_as_client_cr, ) = @_;
+    my ( $self, $acme_key, $todo_as_client_cr, ) = @_;
 
     my $reg_dir = $self->{'_registrations_dir'};
 
     $self->_with_mocked_http_request(
+        $acme_key,
         {
             'get:directory' => sub { return $self->_server_send_directory() },
 
@@ -313,7 +320,7 @@ sub _server_send_directory {
 }
 
 sub _get_rest_calls {
-    my ($self) = @_;
+    my ($self, $acme_key) = @_;
 
     die 'list!' if !wantarray;
 
@@ -321,7 +328,7 @@ sub _get_rest_calls {
 
     for my $r (@requests) {
         next if !$r->{'POST'};
-        $r->{'POST'} = [ _decode_jwt( $r->{'POST'} ) ];
+        $r->{'POST'} = [ _decode_jwt( $r->{'POST'}, $acme_key ) ];
     }
 
     return @requests;

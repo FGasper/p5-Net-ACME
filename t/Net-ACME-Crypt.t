@@ -86,7 +86,7 @@ sub test_get_rsa_jwk_thumbprint : Tests(1) {
     return;
 }
 
-sub test_create_rs256_jwt : Tests(1) {
+sub test_create_rs256_jwt : Tests(3) {
     my $str = Net::ACME::Crypt::create_rs256_jwt(
         key => _KEY(),
         extra_headers => { foo => 123 },
@@ -98,6 +98,32 @@ sub test_create_rs256_jwt : Tests(1) {
         'eyJhbGciOiJSUzI1NiIsImZvbyI6MTIzfQ.SnVzdCB0aGUgZmFjdHMsIG1h4oCZYW0u.B7aFWFZxNoWYaJR7294nNDU_H29z4pJd8lMaEOl3ZlGkSy06bQ5dq0-ywTRguWuSMjxhEZAHBswDu0QNDz3vctrBt2e6_isd0w5pZ6egweS15dcwLiY28fllY1GAH2PxbBxxu5mCQ2UXhohA3RU9JJq4OPlOe90zA6SaWxdJFJOT0hefchy8xvddxvn-vJxnJjJf-se1MagxuvsK7svpF6ztcqtt3iOWcKY1Z8MHw-PFKVcdqIHyE-pe_6ZzyzK_ZIuCxPqhWPyFXY4C3k3kjDsCHqDu1ayT9SxPFk9TEv7Lw1_1mOhCM_dua7KRcT0ol4dxTOINGXu65giq4SBv3w',
         'create_rs256_jwt()',
     );
+
+    $str = Net::ACME::Crypt::create_rs256_jwt(
+        key => _KEY(),
+        extra_headers => { foo => 123 },
+        payload => [ 'A list ...' ],
+    );
+
+    is(
+        $str,
+        'eyJhbGciOiJSUzI1NiIsImZvbyI6MTIzfQ.WyJBIGxpc3QgLi4uIl0.Ln_TQ_Pzsaq19ZxSchpYEv40M1v4_Fvm5GaTCQJcV345n7iLk66DegZD28RRJdtWMVQj7Amyg_rx95QVEo4nOvqGbgBQ1TjS1QoXiTnGBm-460o-EHMDVdCVDN7qDbxHoj7Wa0UtJEbidhi5MB6rVHeqSmXpJUegnd7HmW3x6CubOLqDFtSptqybouv_Ilw2k1eCZmJUi_JMdwsheKL5hw9TUh01jtgx69ewSdpg_YQKL6a8nGpUHEHXHW5fLeg89QyjczCGqJ03A_6NevFx8R_18D1aCV1N-2-rHjlw675Tq2WmTg1awDfuwEquX9jzzgYJj7ry1SxcV5GlxKsIKQ',
+        'create_rs256_jwt() with an array payload',
+    );
+
+    $str = Net::ACME::Crypt::create_rs256_jwt(
+        key => _KEY(),
+        extra_headers => { foo => 123 },
+        payload => { key => 'A thing ...' },
+    );
+
+    is(
+        $str,
+        'eyJhbGciOiJSUzI1NiIsImZvbyI6MTIzfQ.eyJrZXkiOiJBIHRoaW5nIC4uLiJ9.DTqBwNevEwJBuV54CfMnYJNv0rnCAP77DncLPYQ27452MmtATGq_Y1Cv8Qx1k2IWl5GPBY0Se9jEX4FhbCy2ToGgPp3qgBODyyfWpr6lXdxAH_a9tYBVUCNvVs68rLqWkhQNbgDVRz6Kyf9g6dffb8AwWfhWtjaxg70R45yIuXWU9Cyc2H0zvJ1gb-0tDsNflMVE84eFb4NiRSAG1nCzRzporl46rF2lVz8MtrXaNwCT9lkyy4DXh7YfV4ayu7gLR-XVpDrO6Pf39nKvH48pX3Owo2fatROf3xwzgvohD6NgMmaxA1TFbVUXPuid9tMLgkKfGjIClDn2Icx5XkyL-w',
+        'create_rs256_jwt() with a hash payload',
+    );
+
+    return;
 }
 
 1;
