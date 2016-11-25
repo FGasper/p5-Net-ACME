@@ -56,7 +56,8 @@ sub _with_mocked_http_request {
         my $rest_calls_ar = $self->_load_file_json( $self->{'_rest_calls_file'} );
 
         local $ENV{'REQUEST_URI'} = "/$after_host";
-        local $ENV{'REQUEST_METHOD'} = ($method =~ tr<a-z><A-Z>r);
+        local $ENV{'REQUEST_METHOD'} = $method;
+        $ENV{'REQUEST_METHOD'} =~ tr<a-z><A-Z>;
 
         push @$rest_calls_ar, {
             ENV  => {

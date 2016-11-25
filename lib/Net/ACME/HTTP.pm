@@ -108,7 +108,10 @@ sub _request {
         my $exc = $@;
 
         if ( eval { $exc->isa('Net::ACME::X::HTTP::Protocol') } ) {
-            my $nonce = $exc->get('headers')->{ $_NONCE_HEADER =~ tr<A-Z><a-z>r };
+            my $_nonce_header_lc = $_NONCE_HEADER;
+            $_nonce_header_lc =~ tr<A-Z><a-z>;
+
+            my $nonce = $exc->get('headers')->{$_nonce_header_lc};
             $self->{'_last_nonce'} = $nonce if $nonce;
 
             #If the exception is able to be made into a Net::ACME::Error,
