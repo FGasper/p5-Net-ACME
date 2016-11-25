@@ -71,7 +71,11 @@ sub verify_rs256 {
         print {$kfh} $key or die $!;
         close $kfh;
 
+        #Works across exec().
+        local $?;
+
         my $out = qx/openssl dgst -sha256 -signature $spath -prverify $kpath $mpath/;
+        die if $?;
 
         #OpenSSL seems to have changed the actual phrase that gets sent.
         $ok = ($out =~ m<Verif.*OK>);

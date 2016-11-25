@@ -142,6 +142,9 @@ sub _sign_with_key_via_openssl_binary {
     print {$d_fh} $msg or die "write($d_path): $!";
     close $d_fh;
 
+    #Works across exec().
+    local $?;
+
     my $sig = qx/$OPENSSL_BIN_PATH dgst -sha256 -sign $path $d_path/;
     die if $?;
 
