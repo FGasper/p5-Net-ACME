@@ -16,7 +16,7 @@ Revision history for Perl module Net::ACME
 - Add more documentation
 - Need to test CPAN installation
 
-0.091
+0.091 Fri Nov 25 2016
 - Compatible with Perl 5.8+ (previously required 5.14+)
 - Fix a clobber of $@
 - Prevent clobber of $?
