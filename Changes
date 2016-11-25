@@ -15,3 +15,6 @@ Revision history for Perl module Net::ACME
 - Remove Class::Accessor dependency
 - Add more documentation
 - Need to test CPAN installation
+
+0.091
+- Compatible with Perl 5.8+ (previously required 5.14+)
