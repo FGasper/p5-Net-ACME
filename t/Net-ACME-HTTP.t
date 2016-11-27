@@ -29,9 +29,6 @@ use HTTP::Tiny::UA::Response ();
 
 use Net::ACME::EvalBug ();
 use Net::ACME::HTTP ();
-
-use JSON      ();
-
 use Net::ACME::X ();
 
 if ( !caller ) {
@@ -112,7 +109,7 @@ sub test_get_and_post : Tests(8) {
     #A nonsense request. Simplest case, doesn’t return anything useful.
     #----------------------------------------------------------------------
     throws_ok(
-        sub { $ua->get('http://isbvuhsvmdhvhbdm.asyichrsuihvr') },
+        sub { $ua->get('http://123123123') },
         'Net::ACME::X::HTTP::Network',
         'get() to server that doesn’t exist',
     );

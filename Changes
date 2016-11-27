@@ -26,3 +26,6 @@ Revision history for Perl module Net::ACME
 0.092 Sun Nov 27 2016
 - Remove vestigial Crypt::OpenSSL::RSA use()s in tests.
   (They were breaking some test runs.)
+
+0.0921 Sun Nov 27 2016
+- Still another test fix (grr, DNS)
