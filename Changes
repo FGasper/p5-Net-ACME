@@ -22,3 +22,7 @@ Revision history for Perl module Net::ACME
 - Prevent clobber of $?
 - Remove XS dependencies from tests.
 - Add missing File::Slurp test dependency to Makefile.PL
+
+0.092 Sun Nov 27 2016
+- Remove vestigial Crypt::OpenSSL::RSA use()s in tests.
+  (They were breaking some test runs.)

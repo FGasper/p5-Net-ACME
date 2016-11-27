@@ -28,10 +28,6 @@ use HTTP::Tiny::UA::Response ();
 
 use Net::ACME::HTTP ();
 use Net::ACME::Challenge::Pending::http_01 ();
-
-use JSON      ();
-use Crypt::OpenSSL::RSA ();
-
 use Net::ACME::X ();
 
 if ( !caller ) {

@@ -25,8 +25,6 @@ use Net::ACME::Challenge::Pending::http_01 ();
 use Net::ACME::Constants ();
 use Net::ACME::Utils     ();
 
-use Crypt::OpenSSL::RSA             ();
-
 if ( !caller ) {
     my $test_obj = __PACKAGE__->new();
     plan tests => $test_obj->expected_tests(+1);
@@ -34,6 +32,38 @@ if ( !caller ) {
 }
 
 #----------------------------------------------------------------------
+
+sub _KEY {
+    return <<END;
+-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAw65MxcsV0bL2T0eTFe220RynlXj1+CqN2MP5FbWEkFApqIXm
+XBiq/1fp1Emq/M26AalyYtYAA/lDpGYmsUzau39AyOwOvA4Qr87NmWluys/k5IHm
+HqxmuDtW/Hmh+MW0HV29a+5eFjTJX5654K4D9cxqkc29v+gnzzE+NuMEX7Cid38q
+YgcY7dkfkOc+vunFCdGMXv+GcSeByGCeXsHApszti0zUNu8xWqN5bAKo/TJpgIVU
+KG96uVvZ0ydPRDWMK25/LH5cSQMmmCruBV8d0LLFxLKqczH5D7jmftvw/HrnsMX0
+iBcJYVnFJXca4A84gGqozECXVuH3OgCjnGhr3wIDAQABAoIBADhhiUdYS5IfMW8I
+XW3tD0bTLcoYjy6Q/Evfs2443dhC8K3Y3tXcWbC24O3EyBqNIDIIY6fspxZ+BKpi
+sHVXgpKRiNYbhedTWiV9vamdQkn3eqkIcIiX/gTJPDgEx9GJDWuEreZiSQO28+q0
+LjR5jzSMUIxwLmMT/hxpwNZJtOHo3sPPFS6MrrZq1RtgtoqW3T9ESfh2EAst8glm
+RoO9vskkPNWHHs0aOsuRHwYochhJM5Ihfh2kt7NMZzFnAzyOsfbj5RFdkss/Z4IJ
+UraDC9zrx/WY9fVwc3gZkzRi/vCBUZUs8YpgWBdTOzbdRJM458eX/HRjA2jQ6P+i
+T/lvq5ECgYEA7VaU5MBCXHvzr6rvEQGbHqWHjltn4wUUUUKd21yjwndXY04lJlf5
+jHsZ2XRVUkNu4dxeqmIUqLjJL9mVyLle/q9etAbIm9KMyvatrufuBgK1fFCFaDnc
+MvPLBvwR8CHmohkPwA3UpqC4Kqo17dEQypMWZjTp5uyEAaY3vmJhwqcCgYEA0xEw
+3UKgSnfr+mU/H9pT3ydiChjLmJ0jdIi9N9EM3PHa5MpXB6gzpHEu8k9YTgaMLYko
+aKF7RYJTwIXo0zbFYdmG1vBCSILntnU2vTZj5ZNmcB0dHjzhqHBEijkoSfzqfoap
+ylx9RZGAjqv/5+WVcVK586gB8i8CaQXSzCY5TAkCgYAatjPryvetEQZMLyDY+SVM
+PbUUAJWgp2GyA51govyLVoMvWgw0VJJxjSlLoBw6Nfy0zuiYpJFOq/14tTR2cuaO
+I461FE5fu0K9VSYXGWNgqc1jQGzDXj+6PFYNYzFhpW8fr1JmeygD2PLhWmbXbUBG
+jGdo+WuZ4eS5isubUddO4QKBgAsQ36r6D0VYPDsIi+Kzo6oTeoRlAGej9XPqp2EB
+yNbcp0lPgniYTPzWIkv59PtCRJ8ujbvOm5PtXU6+tpI8UOTsbrFeL1t14YgjZRdO
+frZOoBRIsnofXwVhvXYxwPcAF5tCnCxL5RV8p2zTf7s8wjUKzU0FBfUYmdu/vmmN
+p3thAoGBALzFFXhtZ1P+P4DPo8NUagpBl4mEzVW6EMCWpJ8mAjHfXwHCfooMUQ7r
+1KT23I/e0o0kjc67bBhRdYaoeLNFnazN9CqPuqsKhfCWU9w4Uu/oraD3QiSf9ECT
+fzO63bNpgeF1Djw2RmtnpchhUZ63A6IrgqfwQrUVeKtxPknYcMvV
+-----END RSA PRIVATE KEY-----
+END
+}
 
 sub do_tests : Tests(4) {
     my ($self) = @_;
@@ -46,7 +76,7 @@ sub do_tests : Tests(4) {
     is( $challenge->token(), 'the_token', 'token()' );
     is( $challenge->uri(), 'http://the/challenge/uri', 'uri()' );
 
-    my $key_pem = Crypt::OpenSSL::RSA->generate_key(2048)->get_private_key_string();
+    my $key_pem = _KEY();
     my $jwk     = Net::ACME::Utils::get_jwk_data($key_pem);
 
     my $scratch_dir = File::Temp::tempdir( CLEANUP => 1 );
@@ -73,38 +103,6 @@ sub do_tests : Tests(4) {
     );
 
     return;
-}
-
-sub _RSA_PEM {
-    return <<END;
------BEGIN RSA PRIVATE KEY-----
-MIIEowIBAAKCAQEAoy7y6JWNyIu/nAAAY4WE40sWefdwXZinEJDXvEepThFsndU7
-vN/Yamy081Bf9F4KUsjZtMir+vwZL4ImOvnUUcXVa+OtrCQC6TnS7znNF6qAvdKf
-EA9XfEzHWgDMCG1MrnWX4EWa/+Ragh3DLYEG+xH+EJw1L1rW0yHLKUZTo+4QW6OT
-LVWpnVH8mYSmj0OIsOGGpgVO6HyYJNTYUJz0l8Uuaef3urlIW0Ai8etqvvQOJfX9
-DEgq0LjYynTw7ZVPa1kxgnkxwtuU6QGkvpgo3IMjwiJ2a9XR7jzEKY7an4I087lP
-3wKs9OmppieKSZrFp4uGVNT+ieKIn7rHTOfjsQIDAQABAoIBAQCCl7AOMqGlPTG6
-xsWI3/HZdN4n/b4PKXuJ5mDAbRkxQQCLz3pfTUUE5rppfolMJ3ZbiiGwbGg2FEqT
-mrS9vfIM/yYtkagLe0ZZH82PZdKcffdJ8qUZVS3ObCOeA8VFeTNE6xcAhLPm1fkY
-6HiqkffkNiH9aQWnQCtsDD9qaL3HEhcSlEw62+gtXS2tPKaJuHf9+MUM9jzmNk6E
-VBZkSpdt5H0ykblu3HPQGqTg9j/csfZcI6xshnuLREp2Kz2Rtls8JeZvDX7ljUMU
-6sZ5D6HxTB9nV08wCIMQvW+t4141wR10/5hUKkV16VkMw4zfw+M2qzwj97EVqjQS
-EU+w+meBAoGBANAvvvDsIEyyDWRK7cz7pMaFeLlCCmK1QJSfQOpdj4IstDklLdSj
-pHF77s1OAXPzrAz02jXz15EsMs9Q5/OFxCkzske+JCPNYlIiAo64b6yw8XRDvuvv
-JXajnoRapNZ7rAoHRwmeEPTlfIwB9e8L06dtdECXKOtMhCidaUxYhDvvAoGBAMip
-QqrtcwtXU8UVX04QvEVDEaHI51m1Z82BWRIRMWRlxo5hjMhW24Dnrnqt7x1H/ghO
-0HN0CGFTndQVez5liHTZJlqXkFb20e+sEEoseULXx/WHfkvRYsqwnA99SdwIMZpW
-XAeuHDwK0wlidAT3uLvaHjWULyyiSs2ssseiVrpfAoGAH4S7AbqeAT6LrH1zly8Z
-+TxH1LRc4ijSyC18JH9ZtLmT53rrf1/vC4dZ1hdTPPzNNYD0cGqkXkQ0xRJYq5O6
-6Qn8mcP9sLXthsXDYVwm/Bwl0hZXl1yzbUzEOQGIJzi+CR6k8J3Pr2P3ATNiyngd
-6SE3EnhQJ5+D+qoqQPa9vl0CgYBZaerWJZa1AAXI9VwRei2ao2cw80f71nTZwwCA
-p36d4SgX++nyv5lyGErMScMaBiFxbEVAnPy6+bqDbcsMI8wpXTXU+mKMDdHAfaiI
-lMa3/VUR2H1zpWrjLM1trYOC83e+8SpzFadpLd2Z+e/+4q/DrU72ywA2YF76xTCo
-+nKw+wKBgCe44PGXDRmPu0DLHv+2SJNlPOHrV4NVxAdQwJ2lV8qlp1okL56X2z4f
-e9xXbDAqx4LKOow0g12+9Qs0rzrEdIMYag9tm6kxTyiR75eraT79Zl4MO85wbwvO
-18kfmSCPOlYcLkAYpWOMteLoIYremiHvmPSHvL5i15ic7dtQxq8e
------END RSA PRIVATE KEY-----
-END
 }
 
 1;
