@@ -47,7 +47,7 @@ expects is reported immediately via an exception.
 
 =item * Light memory footprint - no Moose/Moo/etc.
 
-=item * No careless overwriting of globals like C<$@>, C<$!> and C<$?>.
+=item * No careless overwriting of globals like C<$@>, C<$!>, and C<$?>.
 (Hopefully your code isn’t susceptible to this anyway, but it’s just a good
 precaution.)
 B<NOTE>: Perl 5.10 and earlier have a bug that basically requires overwriting
@@ -164,7 +164,7 @@ See below for cut-paste-y examples.
 
 =over 4
 
-=item * Find a way to sign with RSA in pure Perl.
+=item * Find a way to sign with RSA in pure Perl. (NB: L<Crypt::RSA> has XS dependencies.)
 
 =item * Support EC keys.
 

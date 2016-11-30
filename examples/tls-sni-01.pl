@@ -2,6 +2,8 @@
 
 #----------------------------------------------------------------------
 # DEPRECATED. Use tls-sni-02 if possible.
+#
+# cf. https://tools.ietf.org/html/draft-ietf-acme-acme-01#section-7.3
 #----------------------------------------------------------------------
 
 use strict;
