@@ -459,7 +459,7 @@ sub test_registration : Tests(2) {
         sub {
             my $acme = _get_acme();
 
-            my $reg = $acme->register('mailto:f@g.tld');
+            my $reg = $acme->register('mailto:f@g.test');
 
             my %methods = (
                 uri       => re(qr</reg/>),
@@ -504,7 +504,7 @@ sub test_registration : Tests(2) {
                     ignore(),
                     {
                         resource => 'new-reg',
-                        contact  => ['mailto:f@g.tld'],
+                        contact  => ['mailto:f@g.test'],
                     },
                 ],
             },
