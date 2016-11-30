@@ -6,7 +6,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME         => 'Net::ACME',
     VERSION_FROM => 'lib/Net/ACME/Constants.pm',            # finds \$VERSION
-    AUTHOR       => 'Felipe Gasper (FELIPE)',
+    AUTHOR       => 'Felipe Gasper',
     ABSTRACT     => 'Client logic for the ACME protocol',
     LICENSE      => 'perl',
     MIN_PERL_VERSION => '5.8.9',
