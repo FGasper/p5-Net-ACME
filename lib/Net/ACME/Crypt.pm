@@ -16,8 +16,6 @@ use JSON              ();
 use Math::BigInt      ();
 use MIME::Base64      ();
 
-use Net::ACME::EvalBug ();
-
 *_encode_b64u = \&MIME::Base64::encode_base64url;
 
 #This can be set ahead of time if desired.
@@ -115,9 +113,14 @@ sub _try_to_load_module {
 
     return 0 if $INC{$path};
 
-    local $@ if !Net::ACME::EvalBug::bug_exists();
+    #cf. eval_bug.readme
+    my $eval_err = $@;
 
-    return eval { require($path); 1 };
+    my $ok = eval { require($path); };
+
+    $@ = $eval_err;
+
+    return $ok;
 }
 
 sub _module_path {

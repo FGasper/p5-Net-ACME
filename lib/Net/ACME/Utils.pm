@@ -29,7 +29,6 @@ use MIME::Base64 ();
 *_to_base64url = \&MIME::Base64::encode_base64url;
 
 use Net::ACME::Crypt ();
-use Net::ACME::EvalBug ();
 use Net::ACME::X ();
 
 my %KEY_OBJ_CACHE;
@@ -42,7 +41,8 @@ END {
 sub verify_token {
     my ($token) = @_;
 
-    local $@ if !Net::ACME::EvalBug::bug_exists();
+    #cf. eval_bug.readme
+    my $eval_err = $@;
 
     eval {
 
@@ -61,7 +61,22 @@ sub verify_token {
         die Net::ACME::X::create( 'InvalidParameter', "“$token” is not a valid ACME token. ($message)" );
     }
 
+    $@ = $eval_err;
+
     return;
+}
+
+sub thing_isa {
+    my ($thing, $class) = @_;
+
+    #cf. eval_bug.readme
+    my $eval_err = $@;
+
+    my $isa = eval { $thing->isa($class) };
+
+    $@ = $eval_err;
+
+    return $isa;
 }
 
 sub get_jwk_data {

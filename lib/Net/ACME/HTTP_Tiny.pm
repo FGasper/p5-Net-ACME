@@ -43,7 +43,6 @@ use parent qw( HTTP::Tiny );
 use HTTP::Tiny::UA::Response ();
 
 use Net::ACME::Constants ();
-use Net::ACME::EvalBug ();
 use Net::ACME::X         ();
 
 our $VERSION;
@@ -71,12 +70,16 @@ sub new {
 sub request {
     my ( $self, $method, $url, $args_hr ) = @_;
 
-    #HTTP::Tiny clobbers this. The clobbering is useless since the
+    #HTTP::Tiny clobbers $@. The clobbering is useless since the
     #error is in the $resp variable already. Clobbering also risks
     #action-at-a-distance problems, so prevent it here.
-    local $@ if !Net::ACME::EvalBug::bug_exists();
+
+    #cf. eval_bug.readme
+    my $eval_err = $@;
 
     my $resp = $self->SUPER::request( $method, $url, $args_hr || () );
+
+    $@ = $eval_err;
 
     my $resp_obj = HTTP::Tiny::UA::Response->new($resp);
 

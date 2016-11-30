@@ -20,8 +20,6 @@ use File::Temp ();
 use JSON ();
 use MIME::Base64 ();
 
-use Net::ACME::EvalBug ();
-
 #A stripped-down copy of Crypt::JWT::decode_jwt() that only knows
 #how to do RSA SHA256, compact form.
 sub decode_jwt {
@@ -49,9 +47,10 @@ sub verify_rs256 {
 
     confess "No key!" if !$key;
 
-    local $@ if !Net::ACME::EvalBug::bug_exists();
-
     my $ok;
+
+    #cf. eval_bug.readme
+    my $eval_err = $@;
 
     if ( eval { require Crypt::OpenSSL::RSA } ) {
         my $rsa = Crypt::OpenSSL::RSA->new_private_key($key);
@@ -84,6 +83,8 @@ sub verify_rs256 {
     }
 
     die "JWT verification failed!" if !$ok;
+
+    $@ = $eval_err;
 
     return;
 }

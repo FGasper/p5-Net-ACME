@@ -29,7 +29,6 @@ use Errno      ();
 use File::Spec ();
 
 use Net::ACME::Constants ();
-use Net::ACME::EvalBug ();
 
 #docroot, token, key_authz
 sub new {
@@ -85,7 +84,8 @@ sub DESTROY {
 sub _mkdir_if_not_exists {
     my ($path) = @_;
 
-    local $@ if !Net::ACME::EvalBug::bug_exists();
+    #cf. eval_bug.readme
+    my $eval_err = $@;
 
     local ( $!, $^E );
 
@@ -97,6 +97,8 @@ sub _mkdir_if_not_exists {
         eval { mkdir $p };
         die if $@ && $@->errno() != Errno::EEXIST();
     }
+
+    $@ = $eval_err;
 
     return;
 }

@@ -40,7 +40,7 @@ use warnings;
 
 use Call::Context ();
 
-use Net::ACME::EvalBug ();
+use Net::ACME::Utils ();
 use Net::ACME::X ();
 
 my $CHALLENGE_CLASS = 'Net::ACME::Challenge';
@@ -53,13 +53,11 @@ sub new {
         _challenges => $opts{'challenges'},
     };
 
-    local $@ if !Net::ACME::EvalBug::bug_exists();
-
     if ( $opts{'challenges'} ) {
         for my $c ( 0 .. $#{ $opts{'challenges'} } ) {
             my $challenge = $opts{'challenges'}[$c];
 
-            if ( !eval { $challenge->isa($CHALLENGE_CLASS) } ) {
+            if ( !Net::ACME::Utils::thing_isa($challenge, $CHALLENGE_CLASS) ) {
                 die Net::ACME::X::create( 'InvalidParameter', "“challenges” index $c ($challenge) is not an instance of “$CHALLENGE_CLASS”!" );
             }
         }

@@ -5,14 +5,13 @@ use warnings;
 
 use Carp ();
 
-use Net::ACME::EvalBug ();
-
 my %_OVERLOADED;
 
 sub _check_overload {
     my ( $class, $str ) = @_;
 
-    local $@ if !Net::ACME::EvalBug::bug_exists();
+    #cf. eval_bug.readme
+    my $eval_err = $@;
 
     $_OVERLOADED{$class} ||= eval qq{
         package $class;
@@ -22,6 +21,8 @@ sub _check_overload {
 
     #Should never happen as long as overload.pm is available.
     die if !$_OVERLOADED{$class};
+
+    $@ = $eval_err;
 
     return;
 }

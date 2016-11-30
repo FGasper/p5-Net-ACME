@@ -50,8 +50,6 @@ expects is reported immediately via an exception.
 =item * No careless overwriting of globals like C<$@>, C<$!>, and C<$?>.
 (Hopefully your code isn’t susceptible to this anyway, but it’s just a good
 precaution.)
-B<NOTE>: Perl 5.10 and earlier have a bug that basically requires overwriting
-global C<$@>; see C<Net::ACME::EvalBug> for an example.
 
 =item * All dependencies are either core or pure Perl. For RSA crypto we use
 L<Crypt::OpenSSL::RSA> if it’s available, or the system’s C<openssl> binary.
@@ -227,7 +225,6 @@ use Net::ACME::Certificate                 ();
 use Net::ACME::Certificate::Pending        ();
 use Net::ACME::Constants                   ();
 use Net::ACME::Challenge::Pending::http_01 ();
-use Net::ACME::EvalBug ();
 use Net::ACME::HTTP                        ();
 use Net::ACME::Registration                ();
 use Net::ACME::Utils                       ();
@@ -389,10 +386,8 @@ sub start_domain_authz {
 sub delete_authz {
     my ( $self, $authz ) = @_;
 
-    local $@ if !Net::ACME::EvalBug::bug_exists();
-
     #sanity
-    if ( !eval { $authz->isa('Net::ACME::Authorization::Pending') } ) {
+    if ( !Net::ACME::Utils::thing_isa($authz, 'Net::ACME::Authorization::Pending') ) {
         die "Must be a pending authz object, not “$authz”!";
     }
 

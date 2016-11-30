@@ -27,7 +27,6 @@ use JSON ();
 
 use HTTP::Tiny::UA::Response ();
 
-use Net::ACME::EvalBug ();
 use Net::ACME::HTTP ();
 use Net::ACME::X ();
 
@@ -195,9 +194,12 @@ sub test_get_and_post : Tests(8) {
 
     $ua_request_cr = sub { die $server_err };
 
-    local $@ if !Net::ACME::EvalBug::bug_exists();
+    #cf. eval_bug.readme
+    my $eval_err = $@;
 
     eval { $ua->post( 'doesn’t matter', { foo => 123 } ) };
+
+    $@ = $eval_err;
 
     $jwt = $request_args[2]->{'content'};
 
