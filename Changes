@@ -29,3 +29,7 @@ Revision history for Perl module Net::ACME
 
 0.0921 Sun Nov 27 2016
 - Still another test fix (grr, DNS)
+
+0.0922 Wed Nov 30 2016
+- Trying once more to get a stable t/Net-ACME-HTTP.t
+- Avoid clobbering $@ in Perl 5.10 and 5.8.
