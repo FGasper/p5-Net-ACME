@@ -109,9 +109,9 @@ sub test_get_and_post : Tests(8) {
     #A nonsense request. Simplest case, doesn’t return anything useful.
     #----------------------------------------------------------------------
     throws_ok(
-        sub { $ua->get('http://123123123') },
+        sub { $ua->get(rand) },
         'Net::ACME::X::HTTP::Network',
-        'get() to server that doesn’t exist',
+        'get() with an invalid URL',
     );
 
     my @request_args;
