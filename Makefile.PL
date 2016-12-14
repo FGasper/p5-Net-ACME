@@ -16,6 +16,7 @@ WriteMakefile(
         'parent'                   => 0.225,
         'Call::Context'            => 0.02,
         'Crypt::Format'            => 0.06,
+        'Crypt::Perl'              => 0.01,
         'Crypt::RSA::Parse'        => 0.041,
         'Digest::SHA'              => 0,
         'HTTP::Tiny'               => 0.058,
