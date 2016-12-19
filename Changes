@@ -33,3 +33,6 @@ Revision history for Perl module Net::ACME
 0.0922 Wed Nov 30 2016
 - Trying once more to get a stable t/Net-ACME-HTTP.t
 - Avoid clobbering $@ in Perl 5.10 and 5.8.
+
+0.093 Mon Dec 19 2016
+- Remove Types::Serialiser dependency.
