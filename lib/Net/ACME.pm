@@ -218,7 +218,6 @@ use warnings;
 use Crypt::Format     ();
 use JSON              ();
 use MIME::Base64      ();
-use Types::Serialiser ();
 
 use Net::ACME::Authorization::Pending      ();
 use Net::ACME::Certificate                 ();
@@ -395,7 +394,7 @@ sub delete_authz {
         $authz->uri(),
         {
             resource => 'authz',
-            delete   => Types::Serialiser::true(),
+            delete   => JSON::true(),
         },
     );
 

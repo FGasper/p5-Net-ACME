@@ -349,7 +349,7 @@ sub test_delete_authz : Tests(1) {
     is_deeply(
         $self->_load_file_json("$tempdir/received"),
         {
-            delete   => Types::Serialiser::true(),
+            delete   => JSON::true(),
             resource => 'authz',
         },
         'correct payload sent to authz endpoint',

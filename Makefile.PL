@@ -23,7 +23,6 @@ WriteMakefile(
         'HTTP::Tiny::UA::Response' => 0.004,
         'JSON'                     => 2.9,
         'MIME::Base64'             => 3.11,
-        'Types::Serialiser'        => 0,
     },
     META_MERGE => {
         'meta-spec' => { version => 2 },
