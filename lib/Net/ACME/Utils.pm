@@ -11,8 +11,6 @@ Net::ACME::Utils - utilities for C<Net::ACME>
     Net::ACME::Utils::verify_token('blah/blah');     #dies
     Net::ACME::Utils::verify_token('blah-blah');     #succeeds
 
-    my $jwk_hr = Net::ACME::Utils::get_jwk_data($rsa_key_pem);
-
 =head1 DESCRIPTION
 
 This module is a home for “miscellaneous” functions that just aren’t
@@ -79,16 +77,8 @@ sub thing_isa {
     return $isa;
 }
 
-sub get_jwk_data {
-    my ($key_pem_or_der) = @_;
+*get_jwk_data = \&Net::ACME::Crypt::get_public_jwk;
 
-    return Net::ACME::Crypt::get_rsa_public_jwk($key_pem_or_der);
-}
-
-sub get_jwk_thumbprint {
-    my ($key_jwk) = @_;
-
-    return Net::ACME::Crypt::get_rsa_jwk_thumbprint( $key_jwk );
-}
+*get_jwk_thumbprint = \&Net::ACME::Crypt::get_jwk_thumbprint;
 
 1;

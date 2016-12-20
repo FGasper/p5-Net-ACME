@@ -131,7 +131,7 @@ See below for cut-paste-y examples.
                     last if $poll->status() eq 'valid';
 
                     if ( $poll->status() eq 'invalid' ) {
-                        my @failed = grep { $_->error() } $poll->challenges();
+                        my @failed = map { $_->error() } $poll->challenges();
 
                         warn $_->to_string() . $/ for @failed;
 
@@ -408,7 +408,9 @@ sub do_challenge {
 
     my ( $token, $uri ) = map { $challenge_obj->$_() } qw( token uri );
 
-    $self->{'_key_jwk'} ||= Net::ACME::Utils::get_jwk_data( $self->{'_key'} );
+    my $key_obj = Net::ACME::Crypt::parse_key($self->{'_key'});
+
+    $self->{'_key_jwk'} ||= Net::ACME::Utils::get_jwk_data( $key_obj );
 
     my $resp = $self->_post_url(
         $uri,

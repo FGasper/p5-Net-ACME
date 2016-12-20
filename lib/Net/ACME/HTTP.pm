@@ -55,7 +55,7 @@ sub new {
 
     my $self = bless {
         _ua       => $ua,
-        _acme_key => $opts{'key'},
+        _acme_key => $opts{'key'} && Net::ACME::Crypt::parse_key($opts{'key'}),
     }, $class;
 
     return bless $self, $class;
@@ -82,9 +82,6 @@ sub post {
         { content => $jws },
         $opts_hr || (),
     );
-}
-
-sub request {
 }
 
 #----------------------------------------------------------------------
@@ -181,11 +178,11 @@ sub _create_jws {
 
     die "Need a nonce before JWS can be created!" if !$self->{'_last_nonce'};
 
-    return Net::ACME::Crypt::create_rs256_jwt(
+    return Net::ACME::Crypt::create_jwt(
         key           => $self->{'_acme_key'},
         extra_headers => {
             nonce => $self->{'_last_nonce'},
-            jwk   => Net::ACME::Utils::get_jwk_data( $self->{'_acme_key'} ),
+            jwk   => Net::ACME::Crypt::get_public_jwk( $self->{'_acme_key'} ),
         },
         payload => $msg,
     );
