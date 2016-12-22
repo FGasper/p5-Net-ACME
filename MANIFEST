@@ -41,6 +41,7 @@ lib/Net/ACME/X/InvalidParameter.pm
 lib/Net/ACME/X/OverloadBase.pm
 lib/Net/ACME/X/Protocol.pm
 lib/Net/ACME/X/UnexpectedResponse.pm
+lib/Net/ACME/X/UnrecognizedKey.pm
 t/001_load.t
 t/Net-ACME-Authorization-Pending.t
 t/Net-ACME-Authorization.t
