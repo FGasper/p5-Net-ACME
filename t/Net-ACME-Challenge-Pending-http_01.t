@@ -87,8 +87,6 @@ sub do_tests : Tests(4) {
         $jwk,
     );
 
-    my $dir = File::Temp::tempdir( CLEANUP => 1 );
-
     my $relative_path = "$Net::ACME::Constants::HTTP_01_CHALLENGE_DCV_DIR_IN_DOCROOT/the_token";
 
     is(
