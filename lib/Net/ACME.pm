@@ -4,7 +4,7 @@ package Net::ACME;
 
 =head1 NAME
 
-Net::ACME - Client for the ACME protocol (e.g., Let’s Encrypt)
+Net::ACME - Client for the ACME protocol (e.g., L<Let’s Encrypt|http://letsencrypt.org>)
 
 =head1 SYNOPSIS
 
@@ -38,6 +38,8 @@ respective ACME resource:
 
 =item * Closely based on cPanel’s widely used Let’s Encrypt plugin.
 
+=item * Support for both RSA and ECDSA encryption (via L<Crypt::Perl>).
+
 =item * Thorough error-checking: any deviation from what the ACME protocol
 expects is reported immediately via an exception.
 
@@ -51,9 +53,8 @@ expects is reported immediately via an exception.
 (Hopefully your code isn’t susceptible to this anyway, but it’s just a good
 precaution.)
 
-=item * All dependencies are either core or pure Perl. For RSA crypto we use
-L<Crypt::OpenSSL::RSA> if it’s available, or the system’s C<openssl> binary.
-Net::ACME will run almost anywhere!
+=item * All dependencies are either core or pure Perl. Net::ACME will run
+anywhere that Perl runs!
 
 =back
 
@@ -62,11 +63,6 @@ Net::ACME will run almost anywhere!
 This module is now well-tested and should be safe for use in your application.
 
 =head1 CUSTOMIZATION
-
-B<OpenSSL>: This module will attempt to use L<Crypt::OpenSSL::RSA> if it is
-available; if not, it falls back to the C<openssl> binary. On most systems this
-should already be in the process’s search path, but if not, specify the binary’s
-location by setting C<$Net::ACME::Crypt::OPENSSL_BIN_PATH>.
 
 B<HTTPS options>: This module uses C<HTTP::Tiny> for its network operations.
 In some instances it is desirable to specify custom C<SSL_options> in that
@@ -162,11 +158,12 @@ See below for cut-paste-y examples.
 
 =over 4
 
-=item * Find a way to sign with RSA in pure Perl. (NB: L<Crypt::RSA> has XS dependencies.)
-
-=item * Support EC keys.
-
-=item * Test and support more ACME v2 features (pending server support).
+=item * Once the L<ACME specification|https://tools.ietf.org/html/draft-ietf-acme-acme>
+is finalized, update this module to take advantage of the full specification.
+As Let’s Encrypt’s L<Boulder|https://github.com/letsencrypt/boulder> is currently
+the only widely-used ACME server, and that software is compatible with
+L<the first draft of the ACME spec|https://tools.ietf.org/html/draft-ietf-acme-acme-01>,
+there’s little reason to update for the time being.
 
 =back
 
@@ -177,7 +174,7 @@ See below for cut-paste-y examples.
 =item * cPanel, Inc. for permission to adapt their ACME framework for
 public consumption.
 
-=item * Stephen Ludin for developing and maintaining C<Protocol::ACME>, from which
+=item * Stephen Ludin for developing and maintaining L<Protocol::ACME>, from which
 this module took its inspiration.
 
 =back
