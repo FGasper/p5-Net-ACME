@@ -182,7 +182,7 @@ sub _create_jws {
         key           => $self->{'_acme_key'},
         extra_headers => {
             nonce => $self->{'_last_nonce'},
-            jwk   => Net::ACME::Crypt::get_public_jwk( $self->{'_acme_key'} ),
+            jwk   => $self->{'_acme_key'}->get_struct_for_public_jwk(),
         },
         payload => $msg,
     );

@@ -80,7 +80,7 @@ fxxJ9QgjdO1aMAarxXlDjb8q7rZXs//QxQ==
 
     my ( $cert_key_pem, $csr_pem ) = _make_csr_for_domains(@domains);
 
-    my $jwk = Net::ACME::Crypt::get_public_jwk( Net::ACME::Crypt::parse_key($reg_key_pem) );
+    my $jwk = Net::ACME::Crypt::parse_key($reg_key_pem)->get_struct_for_public_jwk();
 
     for my $domain (@domains) {
         my $authz_p = $acme->start_domain_authz($domain);

@@ -410,7 +410,7 @@ sub do_challenge {
 
     my $key_obj = Net::ACME::Crypt::parse_key($self->{'_key'});
 
-    $self->{'_key_jwk'} ||= Net::ACME::Utils::get_jwk_data( $key_obj );
+    $self->{'_key_jwk'} ||= $key_obj->get_struct_for_public_jwk();
 
     my $resp = $self->_post_url(
         $uri,

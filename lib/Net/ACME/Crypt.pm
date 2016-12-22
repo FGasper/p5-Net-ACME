@@ -9,54 +9,22 @@ package Net::ACME::Crypt;
 use strict;
 use warnings;
 
-use Digest::SHA       ();
+#We could use CryptX here, but that would require XS,
+#which isn’t available in all environments.
+use Crypt::Perl::PK ();
+
 use JSON              ();
 use Module::Load ();
 use MIME::Base64      ();
 
-use Crypt::Perl::RSA::Parse ();
-
-use Net::ACME::Crypt::RSA ();
 use Net::ACME::X ();
 
 #As per the ACME spec
 use constant JWK_THUMBPRINT_DIGEST => 'sha256';
 
-sub parse_key {
-    my ($pem) = @_;
+use constant JWT_RSA_SIG => 'RS256';
 
-    my $eval_err = $@;
-
-    my $obj = eval { Crypt::Perl::RSA::Parse::private($pem) };
-    if (!$obj) {
-        my $rsa_err = $@;
-
-        Module::Load::load('Crypt::Perl::ECDSA::Parse');
-
-        $obj = eval { Crypt::Perl::ECDSA::Parse::private($pem) };
-
-        #TODO: Check for a specific parse error.
-        if (!$obj) {
-            die Net::ACME::X::Create('UnrecognizedKey', $pem);
-        }
-    }
-
-    $@ = $eval_err;
-
-    return $obj;
-}
-
-sub get_public_jwk {
-    my ($key_obj) = @_;
-
-    if ( $key_obj->isa('Crypt::Perl::RSA::PrivateKey') ) {
-        return Net::ACME::Crypt::RSA::get_public_jwk($key_obj);
-    }
-
-    Module::Load::load('Net::ACME::Crypt::ECDSA');
-
-    return $key_obj->get_struct_for_public_jwk();
-}
+*parse_key = \&Crypt::Perl::PK::parse_key;
 
 sub get_jwk_thumbprint {
     my ($pem_or_der_or_jwk) = @_;
@@ -79,8 +47,6 @@ sub get_jwk_thumbprint {
 
 *_encode_b64u = \&MIME::Base64::encode_base64url;
 
-*get_rsa_public_jwk = \&Net::ACME::Crypt::RSA::get_public_jwk;
-
 sub create_jwt {
     my (%args) = @_;
 
@@ -98,27 +64,30 @@ sub create_jwt {
 #protocol’s needs. Note that UTF-8 will probably get mangled in here,
 #but that’s not a problem since ACME shouldn’t require sending raw UTF-8.
 sub create_rs256_jwt {
-    my ( @args ) = @_;
+    my ( %args ) = @_;
 
-    my $alg = 'RS256';
+    my $alg = JWT_RSA_SIG();
+
+    my $key = $args{'key'};
+
+    my $signer_cr = sub {
+        return $key->can("sign_$alg")->($key, @_);
+    };
 
     return _create_jwt(
-        @args,
+        %args,
         alg => $alg,
-        signer_cr => Net::ACME::Crypt::RSA->can("sign_$alg"),
+        signer_cr => $signer_cr,
     );
 }
 
 sub create_ecc_jwt {
     my (%args) = @_;
 
-    Module::Load::load('Net::ACME::Crypt::ECDSA');
-
     my $key = $args{'key'};
 
     my $signer_cr = sub {
-        my ($message) = @_;
-        return $key->sign_jwa($message);
+        return $key->sign_jwa(@_);
     };
 
     return _create_jwt(
