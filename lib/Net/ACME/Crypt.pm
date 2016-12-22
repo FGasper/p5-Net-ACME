@@ -9,10 +9,6 @@ package Net::ACME::Crypt;
 use strict;
 use warnings;
 
-#We could use CryptX here, but that would require XS,
-#which isn’t available in all environments.
-use Crypt::Perl::PK ();
-
 use JSON              ();
 use Module::Load ();
 use MIME::Base64      ();
@@ -27,20 +23,15 @@ use constant JWT_RSA_SIG => 'RS256';
 *parse_key = \&Crypt::Perl::PK::parse_key;
 
 sub get_jwk_thumbprint {
-    my ($pem_or_der_or_jwk) = @_;
+    my ($jwk_hr) = @_;
+
+    #We could generate the thumbprint directly from the JWK,
+    #but there’d be more code to maintain. For now the speed hit
+    #seems acceptable … ?
 
     Module::Load::load('Crypt::Perl::PK');
 
-    my $func;
-
-    if ('HASH' eq ref $pem_or_der_or_jwk) {
-        $func = 'parse_jwk';
-    }
-    else {
-        $func = 'parse_key';
-    }
-
-    my $key_obj = Crypt::Perl::PK->can($func)->($pem_or_der_or_jwk);
+    my $key_obj = Crypt::Perl::PK::parse_jwk($jwk_hr);
 
     return $key_obj->get_jwk_thumbprint(JWK_THUMBPRINT_DIGEST());
 }
@@ -150,20 +141,6 @@ sub _payload_enc {
     }
 
     return $payload;
-}
-
-sub _bigint_to_raw {
-    my ($bigint) = @_;
-
-    my $hex = $bigint->as_hex();
-    $hex =~ s<\A0x><>;
-
-    #Ensure that we have an even number of hex digits.
-    if (length($hex) % 2) {
-        substr($hex, 0, 0) = '0';
-    }
-
-    return pack 'H*', $hex;
 }
 
 1;

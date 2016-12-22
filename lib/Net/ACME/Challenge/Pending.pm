@@ -54,8 +54,6 @@ sub type {
     return $self->{'_type'};
 }
 
-#This will actually accept a PEM or DER key (public or private) as well
-#as the documented JWK. Would it be useful to have it accept a key object?
 sub make_key_authz {
     my ( $self, $pub_jwk_hr ) = @_;
 
