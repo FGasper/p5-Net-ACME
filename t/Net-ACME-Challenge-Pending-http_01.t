@@ -76,8 +76,8 @@ sub do_tests : Tests(4) {
     is( $challenge->token(), 'the_token', 'token()' );
     is( $challenge->uri(), 'http://the/challenge/uri', 'uri()' );
 
-    my $key_pem = _KEY();
-    my $jwk     = Net::ACME::Utils::get_jwk_data($key_pem);
+    my $key_obj = Net::ACME::Crypt::parse_key(_KEY());
+    my $jwk     = $key_obj->get_struct_for_public_jwk();
 
     my $scratch_dir = File::Temp::tempdir( CLEANUP => 1 );
 

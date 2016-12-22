@@ -64,6 +64,7 @@ sub verify_token {
     return;
 }
 
+#Use this to avoid a Try::Tiny dependency.
 sub thing_isa {
     my ($thing, $class) = @_;
 
@@ -76,9 +77,5 @@ sub thing_isa {
 
     return $isa;
 }
-
-*get_jwk_data = \&Net::ACME::Crypt::get_public_jwk;
-
-*get_jwk_thumbprint = \&Net::ACME::Crypt::get_jwk_thumbprint;
 
 1;

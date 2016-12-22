@@ -28,8 +28,7 @@ Returns a string to use as key authorization for the challenge.
 use strict;
 use warnings;
 
-use Module::Load ();
-
+use Net::ACME::Crypt ();
 use Net::ACME::Utils ();
 
 sub new {
@@ -55,17 +54,14 @@ sub type {
     return $self->{'_type'};
 }
 
+#This will actually accept a PEM or DER key (public or private) as well
+#as the documented JWK. Would it be useful to have it accept a key object?
 sub make_key_authz {
     my ( $self, $pub_jwk_hr ) = @_;
 
     my $eval_err = $@;
 
-    my $jwk_thumbprint;
-
-    if ('HASH' eq ref $pub_jwk_hr) {
-        Module::Load::load('Net::ACME::Crypt');
-        $jwk_thumbprint = Net::ACME::Crypt::get_jwk_thumbprint( $pub_jwk_hr );
-    }
+    my $jwk_thumbprint = Net::ACME::Crypt::get_jwk_thumbprint( $pub_jwk_hr );
 
     return "$self->{'_token'}.$jwk_thumbprint";
 }
