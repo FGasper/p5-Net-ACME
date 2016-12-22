@@ -13,10 +13,11 @@ use parent qw( Test::Class );
 use FindBin;
 use lib "$FindBin::Bin/lib";
 
+use Call::Context ();
+use Digest::SHA ();
 use File::Slurp ();
 use File::Temp ();
-
-use Call::Context ();
+use JSON ();
 
 use Test::Crypt ();
 
