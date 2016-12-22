@@ -10,8 +10,9 @@ use strict;
 use warnings;
 
 use JSON              ();
-use Module::Load ();
 use MIME::Base64      ();
+
+use Crypt::Perl::PK ();
 
 use Net::ACME::X ();
 
@@ -28,8 +29,6 @@ sub get_jwk_thumbprint {
     #We could generate the thumbprint directly from the JWK,
     #but there’d be more code to maintain. For now the speed hit
     #seems acceptable … ?
-
-    Module::Load::load('Crypt::Perl::PK');
 
     my $key_obj = Crypt::Perl::PK::parse_jwk($jwk_hr);
 

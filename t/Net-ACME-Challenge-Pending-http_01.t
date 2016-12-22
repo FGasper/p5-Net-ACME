@@ -18,6 +18,7 @@ use Test::NoWarnings;
 use Test::Deep;
 use Test::Exception;
 
+use File::Slurp ();
 use File::Temp ();
 
 use Net::ACME::Challenge::Pending::http_01 ();
@@ -90,9 +91,10 @@ sub do_tests : Tests(4) {
 
     my $relative_path = "$Net::ACME::Constants::HTTP_01_CHALLENGE_DCV_DIR_IN_DOCROOT/the_token";
 
-    ok(
-        ( -e "$scratch_dir/$relative_path" ),
-        'DCV file exists',
+    is(
+        File::Slurp::read_file("$scratch_dir/$relative_path"),
+        'the_token.NHDpucT75mJ9q2JOrBsMxI01r_xjdj9gx5OGEGzZvv8',
+        'DCV file contents',
     );
 
     undef $handler;
