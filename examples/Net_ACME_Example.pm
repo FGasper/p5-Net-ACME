@@ -11,7 +11,10 @@ use lib "$FindBin::Bin/../lib";
 use Net::ACME::Crypt ();
 use Net::ACME::LetsEncrypt ();
 
+#Use OpenSSL RSA for speed
 use Crypt::OpenSSL::RSA    ();
+
+#For CSR creation
 use Crypt::OpenSSL::PKCS10 ();
 
 my $KEY_SIZE = 2_048;
