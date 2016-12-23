@@ -37,23 +37,30 @@ sub get_jwk_thumbprint {
 
 *_encode_b64u = \&MIME::Base64::encode_base64url;
 
+#expects:
+#   key - object
+#   payload
+#   extra_headers (optional, hashref)
 sub create_jwt {
     my (%args) = @_;
 
     if ($args{'key'}->isa('Crypt::Perl::RSA::PrivateKey')) {
-        return create_rs256_jwt(%args);
+        return _create_rs256_jwt(%args);
     }
     elsif ($args{'key'}->isa('Crypt::Perl::ECDSA::PrivateKey')) {
-        return create_ecc_jwt(%args);
+        return _create_ecc_jwt(%args);
     }
 
     die "Unrecognized “key”: “$args{'key'}”";
 }
 
+#----------------------------------------------------------------------
+
 #Based on Crypt::JWT::encode_jwt(), but focused on this particular
-#protocol’s needs. Note that UTF-8 will probably get mangled in here,
+#protocol’s needs. Note that UTF-8 might get mangled in here,
 #but that’s not a problem since ACME shouldn’t require sending raw UTF-8.
-sub create_rs256_jwt {
+#(Maybe with registration??)
+sub _create_rs256_jwt {
     my ( %args ) = @_;
 
     my $alg = JWT_RSA_SIG();
@@ -71,7 +78,7 @@ sub create_rs256_jwt {
     );
 }
 
-sub create_ecc_jwt {
+sub _create_ecc_jwt {
     my (%args) = @_;
 
     my $key = $args{'key'};
@@ -86,8 +93,6 @@ sub create_ecc_jwt {
         signer_cr => $signer_cr,
     );
 }
-
-#----------------------------------------------------------------------
 
 sub _create_jwt {
     my ( %args ) = @_;
