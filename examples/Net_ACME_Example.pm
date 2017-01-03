@@ -11,13 +11,13 @@ use lib "$FindBin::Bin/../lib";
 use Net::ACME::Crypt ();
 use Net::ACME::LetsEncrypt ();
 
-#Use OpenSSL RSA for speed
-use Crypt::OpenSSL::RSA    ();
+use Crypt::Perl::ECDSA::Generate ();
+use Crypt::Perl::PKCS10 ();
 
-#For CSR creation
-use Crypt::OpenSSL::PKCS10 ();
+#LE doesn’t seem to support this curve.
+#my $ECDSA_CURVE = 'secp521r1';
 
-my $KEY_SIZE = 2_048;
+my $ECDSA_CURVE = 'secp384r1';
 
 sub do_example {
     my ($handle_combination_cr) = @_;
@@ -26,11 +26,9 @@ sub do_example {
     print "Look at:$/$/\t$tos_url$/$/… and hit CTRL-C if you DON’T accept these terms.$/";
     <STDIN>;
 
-    #Safe as of 2016
-    my $key_size = 2_048;
+    my $reg_key = Crypt::Perl::ECDSA::Generate::by_name($ECDSA_CURVE);
 
-    my $reg_key     = Crypt::OpenSSL::RSA->generate_key($KEY_SIZE);
-    my $reg_key_pem = $reg_key->get_private_key_string();
+    my $reg_key_pem = $reg_key->to_pem_with_curve_name();
 
     #Want a real cert? Then comment this out.
     {
@@ -57,7 +55,7 @@ sub do_example {
 
     print $/;
 
-    my ( $cert_key_pem, $csr_pem ) = _make_csr_for_domains(@domains);
+    my ( $cert_key_pem, $csr_pem ) = _make_key_and_csr_for_domains(@domains);
 
     my $jwk = Net::ACME::Crypt::parse_key($reg_key_pem)->get_struct_for_public_jwk();
 
@@ -93,7 +91,6 @@ sub do_example {
         }
     }
 
-    #Create your own CSR (e.g., using Crypt::OpenSSL::PKCS10).
     my $cert = $acme->get_certificate($csr_pem);
 
     #This shouldn’t actually be necessary for Let’s Encrypt,
@@ -109,26 +106,31 @@ sub do_example {
     return;
 }
 
-sub _make_csr_for_domains {
+sub _make_key_and_csr_for_domains {
     my (@domains) = @_;
     Call::Context::must_be_list();
 
-    my $rsa = Crypt::OpenSSL::RSA->generate_key($KEY_SIZE);
+    #ECDSA is used here because it’s quick enough to run in pure Perl.
+    #If you need/want RSA, look at Crypt::OpenSSL::RSA, and/or
+    #install Math::BigInt::GMP (or M::BI::Pari) and use
+    #Crypt::Perl::RSA::Generate. Or just do qx<openssl genrsa>. :)
+    my $key = Crypt::Perl::ECDSA::Generate::by_name($ECDSA_CURVE);
 
-    my $req = Crypt::OpenSSL::PKCS10->new_from_rsa($rsa);
-    $req->set_subject('/');
+    my $pkcs10 = Crypt::Perl::PKCS10->new(
+        key => $key,
 
-    my @san_parts = map { "DNS.$_:$domains[$_]" } 0 .. $#domains;
+        subject => [
+            commonName => $domains[0],
+        ],
 
-    $req->add_ext(
-        Crypt::OpenSSL::PKCS10::NID_subject_alt_name(),
-        join( ',', @san_parts ),
+        attributes => [
+            [ 'extensionRequest',
+                [ 'subjectAltName', map { ( dNSName => $_ ) } @domains ],
+            ],
+        ],
     );
-    $req->add_ext_final();
 
-    $req->sign();
-
-    return ( $rsa->get_private_key_string(), $req->get_pem_req() );
+    return ( $key->to_pem_with_curve_name(), $pkcs10->to_pem() );
 }
 
 1;
