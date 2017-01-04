@@ -108,6 +108,7 @@ sub do_example {
 
 sub _make_key_and_csr_for_domains {
     my (@domains) = @_;
+
     Call::Context::must_be_list();
 
     #ECDSA is used here because it’s quick enough to run in pure Perl.

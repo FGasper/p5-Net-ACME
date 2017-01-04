@@ -63,7 +63,7 @@ Net_ACME_Example::do_example(
         print "… then make TLS connections to $domain:https serve up the$/";
         print "certificate when the client’s SNI header is the value above.$/$/";
 
-        print "NOTE THE INHERENT INSECURITY OF THIS LOGIC: the response to the$/";
+        print "NOTE THE INHERENT PROBLEM WITH THIS LOGIC: the response to the$/";
         print "tls-sni-01 challenge needs no connection to the party requesting$/";
         print "the authz except what’s given in the challenge itself.$/";
 
