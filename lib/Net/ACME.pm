@@ -91,7 +91,7 @@ See below for cut-paste-y examples.
 
     #Use this method any time you want to update contact information,
     #not just when you set up a new account.
-    my $reg = $acme->register('mailto:who.am@i.tld', 'mailto:who@else.tld');
+    my $reg = $acme->register('mailto:me@example.com', 'mailto:who@example.com');
 
     $acme->accept_tos( $reg->uri(), $tos_url );
 
