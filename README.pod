@@ -14,8 +14,9 @@ Net::ACME - Client for the ACME protocol (e.g., L<Let’s Encrypt|http://letsenc
 
 =head1 DESCRIPTION
 
-This module implements client logic for the ACME protocol,
-the system for automated issuance of SSL certificates used by Let’s Encrypt.
+This module implements client logic (including SSL certificate issuance)
+for the ACME protocol, the system for automated issuance of SSL
+certificates used by Let’s Encrypt.
 
 The methods of this class return objects that correspond to the
 respective ACME resource:
