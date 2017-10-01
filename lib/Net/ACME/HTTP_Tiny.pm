@@ -78,6 +78,9 @@ sub request {
     my $eval_err = $@;
 
     my $resp = $self->SUPER::request( $method, $url, $args_hr || () );
+use Data::Dumper;
+print STDERR Dumper $resp;
+delete $resp->{'method'};
 
     $@ = $eval_err;
 
