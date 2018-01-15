@@ -22,7 +22,7 @@ my $ECDSA_CURVE = 'secp384r1';
 sub do_example {
     my ($handle_combination_cr) = @_;
 
-    my $tos_url = Net::ACME::LetsEncrypt->get_terms_of_service();
+    my $tos_url = Net::ACME::LetsEncrypt->get_terms_of_service() or die 'can’t get LE terms of service!';
     print "Look at:$/$/\t$tos_url$/$/… and hit CTRL-C if you DON’T accept these terms.$/";
     <STDIN>;
 

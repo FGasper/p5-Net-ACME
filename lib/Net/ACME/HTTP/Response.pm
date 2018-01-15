@@ -28,7 +28,7 @@ sub die_because_unexpected {
 sub content_struct {
     my ($self) = @_;
 
-    return JSON::decode_json( $self->content() );
+    return JSON->new()->allow_nonref()->decode( $self->content() );
 }
 
 #A “poor man’s Link header parser” that only knows how to handle

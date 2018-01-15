@@ -141,13 +141,13 @@ sub _do_acme_server {
     $self->_with_mocked_http_request(
         $acme_key,
         {
-            'get:directory' => sub { return $self->_server_send_directory() },
+            'GET:directory' => sub { return $self->_server_send_directory() },
 
-            'get:terms' => sub {
+            'GET:terms' => sub {
                 return( 200, 'OK', { Location => 'http://the.terms' } );
             },
 
-            'post:reg' => sub {
+            'POST:reg' => sub {
                 my ( $header, $payload ) = @_;
 
                 my ($reg_index) = ( $ENV{'REQUEST_URI'} =~ m<.+/(.+)> );
@@ -177,7 +177,7 @@ sub _do_acme_server {
                 }
             },
 
-            'post:mock-acme/mock-new-reg' => sub {
+            'POST:mock-acme/mock-new-reg' => sub {
                 my ( $header, $payload ) = @_;
 
                 my $reg_index = Digest::SHA::sha256_hex( join( '.', @{ $header->{'jwk'} }{ 'n', 'e' } ) );
@@ -212,7 +212,7 @@ sub _do_acme_server {
                 }
             },
 
-            'post:mock-acme/mock-new-authz' => sub {
+            'POST:mock-acme/mock-new-authz' => sub {
                 my ( $header, $payload ) = @_;
 
                 my $domain = $payload->{'identifier'}{'value'};

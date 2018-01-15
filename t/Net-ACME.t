@@ -176,9 +176,9 @@ sub test_get_certificate : Tests(3) {
     my $host = t::Net::ACME::MockService::_HOST();
 
     my %endpoints = (
-        'get:directory' => sub { return $self->_server_send_directory() },
+        'GET:directory' => sub { return $self->_server_send_directory() },
 
-        'get:issuer_cert' => sub {
+        'GET:issuer_cert' => sub {
             return(
                 200, 'OK',
                 {
@@ -188,7 +188,7 @@ sub test_get_certificate : Tests(3) {
             );
         },
 
-        'post:mock-acme/mock-new-cert' => sub {
+        'POST:mock-acme/mock-new-cert' => sub {
             return (
                 201 => 'Created',
                 {
@@ -272,8 +272,8 @@ sub test_do_challenge : Tests(1) {
     $self->_with_mocked_http_request(
         _ACME_KEY(),
         {
-            'get:directory' => sub { return $self->_server_send_directory() },
-            'post:challenge/0' => sub {
+            'GET:directory' => sub { return $self->_server_send_directory() },
+            'POST:challenge/0' => sub {
                 return (202 => 'Accepted');
             },
         },
@@ -330,8 +330,8 @@ sub test_delete_authz : Tests(1) {
     $self->_with_mocked_http_request(
         _ACME_KEY(),
         {
-            'get:directory' => sub { return $self->_server_send_directory() },
-            'post:my_authz'  => sub {
+            'GET:directory' => sub { return $self->_server_send_directory() },
+            'POST:my_authz'  => sub {
                 my ( $header, $payload ) = @_;
 
                 $self->_dump_file_json( "$tempdir/received", $payload );
@@ -400,8 +400,8 @@ sub test_start_domain_authz : Tests(3) {
     $self->_with_mocked_http_request(
         _ACME_KEY(),
         {
-            'get:directory'                  => sub { return $self->_server_send_directory() },
-            'post:mock-acme/mock-new-authz' => $mock_new_authz_cr,
+            'GET:directory'                  => sub { return $self->_server_send_directory() },
+            'POST:mock-acme/mock-new-authz' => $mock_new_authz_cr,
         },
         sub {
             my $acme = _get_acme();

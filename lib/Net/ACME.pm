@@ -10,15 +10,19 @@ Net::ACME - Client for the ACME protocol (e.g., L<Let’s Encrypt|http://letsenc
 
     package MyACME::SomeService;
 
-    sub _HOST { }   #return the name of the ACME host
+    use constant _HOST => ...;   #the name of the ACME host
 
     #See below for full examples.
 
 =head1 DESCRIPTION
 
 This module implements client logic (including SSL certificate issuance)
-for the ACME protocol, the system for automated issuance of SSL
-certificates used by Let’s Encrypt.
+for the “draft” version of the ACME protocol,
+the system for automated issuance of SSL certificates used by
+L<Let’s Encrypt|http://letsencrypt.org>.
+
+(For support of the L<IETF|http://ietf.org>-standard version of this
+protocol, look at L<Net::ACME2>.)
 
 The methods of this class return objects that correspond to the
 respective ACME resource:
@@ -37,7 +41,7 @@ respective ACME resource:
 
 =over 4
 
-=item * Closely based on cPanel’s widely used Let’s Encrypt plugin.
+=item * Closely based on cPanel’s widely-used Let’s Encrypt plugin.
 
 =item * Support for both RSA and ECDSA encryption (via L<Crypt::Perl>).
 
@@ -182,7 +186,12 @@ this module took its inspiration.
 
 =head1 SEE ALSO
 
-I am aware of the following additional CPAN modules that implement this protocol:
+For support of the forthcoming (as of this writing)
+L<IETF|http://ietf.org>-standard version of this protocol, look at
+L<Net::ACME2>.
+
+I am aware of the following additional CPAN modules that implement
+the draft ACME protocol:
 
 =over 4
 
@@ -468,21 +477,20 @@ sub get_certificate {
     return;
 }
 
-#This isn’t needed yet, nor is it useful because
-#Let’s Encrypt (i.e., Boulder) doesn’t support it.
-#Once Boulder supports this, we should switch to it
-#in favor of the LE-specific logic in LetsEncrypt.pm.
-#
-#cf. https://ietf-wg-acme.github.io/acme/#rfc.section.6.1.1
-#sub get_terms_of_service {
-#    my ($self) = @_;
-#
-#    my $dir = $self->_get_directory();
-#    my $url = $self->_get_directory()->{'meta'} or die 'No “meta” in directory!';
-#    $url = $url->{'terms-of-service'} or die 'No “terms-of-service” in directory metadata!';
-#
-#    return $url;
-#}
+sub get_terms_of_service {
+    my ($self) = @_;
+
+    #We want to be able to call this as a class method.
+    if (!ref $self) {
+        $self = $self->new();
+    }
+
+    my $dir = $self->_get_directory();
+    my $url = $self->_get_directory()->{'meta'} or die 'No “meta” in directory!';
+    $url = $url->{'terms-of-service'} or die 'No “terms-of-service” in directory metadata!';
+
+    return $url;
+}
 
 #----------------------------------------------------------------------
 

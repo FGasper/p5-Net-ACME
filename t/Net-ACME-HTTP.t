@@ -139,7 +139,7 @@ sub test_get_and_post : Tests(8) {
 
     is_deeply(
         \@request_args,
-        [ 'get', 'doesn’t matter' ],
+        [ 'GET', 'doesn’t matter' ],
         'get() passes args to UA request()',
     );
 

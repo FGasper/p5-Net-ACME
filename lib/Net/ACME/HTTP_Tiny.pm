@@ -48,14 +48,16 @@ use Net::ACME::X         ();
 our $VERSION;
 *VERSION = \$Net::ACME::Constants::VERSION;
 
+use constant VERSION => $Net::ACME::Constants::VERSION;
+
 #Use this to tweak SSL config, e.g., if you want to cache PublicSuffix.
 our @SSL_OPTIONS;
 
 sub new {
     my ( $class, %args ) = @_;
 
-    $args{'SSL_options'} &&= {
-        %{ $args{'SSL_options'} },
+    $args{'SSL_options'} = {
+        ( $args{'SSL_options'} ? (%{ $args{'SSL_options'} }) : () ),
         @SSL_OPTIONS,
     };
 
@@ -78,9 +80,6 @@ sub request {
     my $eval_err = $@;
 
     my $resp = $self->SUPER::request( $method, $url, $args_hr || () );
-use Data::Dumper;
-print STDERR Dumper $resp;
-delete $resp->{'method'};
 
     $@ = $eval_err;
 

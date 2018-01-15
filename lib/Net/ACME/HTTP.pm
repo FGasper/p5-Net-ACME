@@ -65,7 +65,7 @@ sub new {
 sub get {
     my ( $self, $url ) = @_;
 
-    return $self->_request_and_set_last_nonce( 'get', $url );
+    return $self->_request_and_set_last_nonce( 'GET', $url );
 }
 
 #POSTs are signed.
@@ -77,7 +77,7 @@ sub post {
     my $jws = $self->_create_jws( JSON->new()->allow_nonref()->encode($data) );
 
     return $self->_request_and_set_last_nonce(
-        'post',
+        'POST',
         $url,
         { content => $jws },
         $opts_hr || (),
