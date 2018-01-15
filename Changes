@@ -6,6 +6,7 @@ Revision history for Perl module Net::ACME
 - Use proper HTTP method names.
 - Reorder this changelog in descending chronological order.
 - Remove TLS-SNI authorization examples.
+- Make this library easier to find in MetaCPAN search.
 
 0.11 Wed Feb 08 2017
 - Require bug-fixed Crypt::Perl version

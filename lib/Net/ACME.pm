@@ -6,6 +6,8 @@ package Net::ACME;
 
 Net::ACME - Client for the ACME protocol (e.g., L<Let’s Encrypt|http://letsencrypt.org>)
 
+X<Lets Encrypt> X<Let's Encrypt> X<letsencrypt>
+
 =head1 SYNOPSIS
 
     package MyACME::SomeService;
