@@ -9,7 +9,7 @@ use warnings;
 
 our $VERSION;
 BEGIN {
-    $VERSION = '0.12-TRIAL3';
+    $VERSION = '0.12';
 }
 
 our $HTTP_01_CHALLENGE_DCV_DIR_IN_DOCROOT = '.well-known/acme-challenge';
