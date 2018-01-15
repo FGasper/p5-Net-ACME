@@ -5,6 +5,7 @@ Revision history for Perl module Net::ACME
 - Fix LE get_terms_of_service().
 - Use proper HTTP method names.
 - Reorder this changelog in descending chronological order.
+- Remove TLS-SNI authorization examples.
 
 0.11 Wed Feb 08 2017
 - Require bug-fixed Crypt::Perl version
