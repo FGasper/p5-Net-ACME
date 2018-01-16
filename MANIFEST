@@ -9,8 +9,6 @@ examples/Net_ACME_Example.pm
 examples/dns-01.pl
 examples/http-01.pl
 examples/http-01_local.pl
-examples/tls-sni-01.pl
-examples/tls-sni-02.pl
 lib/Net/ACME.pm
 lib/Net/ACME/AccessorBase.pm
 lib/Net/ACME/Authorization.pm
