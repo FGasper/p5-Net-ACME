@@ -42,13 +42,12 @@ use parent qw( HTTP::Tiny );
 
 use HTTP::Tiny::UA::Response ();
 
-use Net::ACME::Constants ();
-use Net::ACME::X         ();
+# Circular dependency required because metacpan.org will (apparently?)
+# ignore distros that don’t define $VERSION in their main-indexed module.
+# This was not formerly the case …
+use Net::ACME ();
 
-our $VERSION;
-*VERSION = \$Net::ACME::Constants::VERSION;
-
-use constant VERSION => $Net::ACME::Constants::VERSION;
+use Net::ACME::X ();
 
 #Use this to tweak SSL config, e.g., if you want to cache PublicSuffix.
 our @SSL_OPTIONS;
@@ -112,5 +111,6 @@ sub request {
     return $resp_obj;
 }
 
-1;
+sub VERSION { $Net::ACME::VERSION }
 
+1;

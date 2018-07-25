@@ -1,5 +1,9 @@
 Revision history for Perl module Net::ACME
 
+0.13 Tue Jul 24 2018
+- Fix indexing to make metacpan.org list this distribution again.
+- Correct misinformation about pure-Perl-ness and XS/TLS dependency.
+
 0.12 Mon Jan 15 2018
 - Update docs to mention ACME v2.
 - Fix LE get_terms_of_service().

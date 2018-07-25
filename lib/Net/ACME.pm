@@ -60,8 +60,13 @@ expects is reported immediately via an exception.
 (Hopefully your code isn’t susceptible to this anyway, but it’s just a good
 precaution.)
 
-=item * All dependencies are either core or pure Perl. Net::ACME will run
-anywhere that Perl runs!
+=item * This is a pure-Perl solution. Most of its dependencies are
+either core modules or pure Perl themselves. XS is necessary to
+communicate with the ACME server via TLS; however, most Perl installations
+already include the necessary logic (i.e., L<Net::SSLeay>) for TLS.
+
+In short, Net::ACME will run anywhere that Perl can speak TLS, which is
+I<almost> everywhere that Perl runs.
 
 =back
 
@@ -238,8 +243,7 @@ use Net::ACME::Registration                ();
 use Net::ACME::Utils                       ();
 use Net::ACME::X                           ();
 
-our $VERSION;
-*VERSION = \$Net::ACME::Constants::VERSION;
+our $VERSION = '0.13-TRIAL1';
 
 *_to_base64url = \&MIME::Base64::encode_base64url;
 

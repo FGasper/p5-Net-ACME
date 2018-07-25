@@ -5,9 +5,9 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
     NAME         => 'Net::ACME',
-    VERSION_FROM => 'lib/Net/ACME/Constants.pm',            # finds \$VERSION
     AUTHOR       => 'Felipe Gasper',
-    ABSTRACT     => 'Client logic for the ACME protocol',
+    VERSION_FROM => 'lib/Net/ACME.pm',            # finds \$VERSION
+    ABSTRACT_FROM => 'lib/Net/ACME.pm',
     LICENSE      => 'perl',
     MIN_PERL_VERSION => '5.8.9',
     PREREQ_PM    => {
