@@ -1,5 +1,8 @@
 Revision history for Perl module Net::ACME
 
+0.14
+- Fix LICENSE file
+
 0.13 Tue Jul 24 2018
 - Fix indexing to make metacpan.org list this distribution again.
 - Correct misinformation about pure-Perl-ness and XS/TLS dependency.
