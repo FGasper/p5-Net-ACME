@@ -243,7 +243,7 @@ use Net::ACME::Registration                ();
 use Net::ACME::Utils                       ();
 use Net::ACME::X                           ();
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 *_to_base64url = \&MIME::Base64::encode_base64url;
 

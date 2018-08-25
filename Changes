@@ -1,5 +1,8 @@
 Revision history for Perl module Net::ACME
 
+0.15
+- Fix LICENSE file (again)
+
 0.14
 - Fix LICENSE file
 
