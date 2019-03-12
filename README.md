@@ -16,7 +16,7 @@ Net::ACME - Client for the (old) ACME protocol (e.g., [Let’s Encrypt](http://l
 
 **WARNING:** Let’s Encrypt has announced [end-of-life for their API
 that uses this protocol](https://community.letsencrypt.org/t/end-of-life-plan-for-acmev1/88430). All applications that use this module should migrate to
-[Net::ACME2](https://metacpan.org/pod/Net::ACME2).
+[Net::ACME2](https://metacpan.org/pod/Net::ACME2). Further use of this module is discouraged.
 
 # DESCRIPTION
 

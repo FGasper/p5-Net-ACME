@@ -59,7 +59,6 @@ t/Net-ACME-Registration.t
 t/Net-ACME-RetryAfter.t
 t/Net-ACME-Utils.t
 t/Net-ACME-X.t
-t/Net-ACME-X_lazy.t
 t/Net-ACME.t
 t/lib/Test/ACME.pm
 t/lib/Test/ACMEServer.pm
