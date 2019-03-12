@@ -4,7 +4,7 @@ Changes
 LICENSE
 MANIFEST
 Makefile.PL
-README.pod
+README.md
 eval_bug.readme
 examples/Net_ACME_Example.pm
 examples/dns-01.pl

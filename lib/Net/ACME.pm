@@ -4,7 +4,7 @@ package Net::ACME;
 
 =head1 NAME
 
-Net::ACME - Client for the ACME protocol (e.g., L<Let’s Encrypt|http://letsencrypt.org>)
+Net::ACME - Client for the (old) ACME protocol (e.g., L<Let’s Encrypt|http://letsencrypt.org>)
 
 X<Lets Encrypt> X<Let's Encrypt> X<letsencrypt>
 
@@ -16,6 +16,12 @@ X<Lets Encrypt> X<Let's Encrypt> X<letsencrypt>
 
     #See below for full examples.
 
+=head1 END-OF-LIFE WARNING
+
+B<WARNING:> Let’s Encrypt has announced L<end-of-life for their API
+that uses this protocol|https://community.letsencrypt.org/t/end-of-life-plan-for-acmev1/88430>. All applications that use this module should migrate to
+L<Net::ACME2>. Further use of this module is discouraged.
+
 =head1 DESCRIPTION
 
 This module implements client logic (including SSL certificate issuance)
@@ -23,8 +29,8 @@ for the “draft” version of the ACME protocol,
 the system for automated issuance of SSL certificates used by
 L<Let’s Encrypt|http://letsencrypt.org>.
 
-(For support of the L<IETF|http://ietf.org>-standard version of this
-protocol, look at L<Net::ACME2>.)
+For support of the L<IETF|http://ietf.org>-standard version of this
+protocol, look at L<Net::ACME2>.
 
 The methods of this class return objects that correspond to the
 respective ACME resource:
@@ -193,8 +199,8 @@ this module took its inspiration.
 
 =head1 SEE ALSO
 
-For support of the forthcoming (as of this writing)
-L<IETF|http://ietf.org>-standard version of this protocol, look at
+For support of the version of this protocol codified in
+L<RFC 8555|https://www.rfc-editor.org/rfc/rfc8555.txt>, look at
 L<Net::ACME2>.
 
 I am aware of the following additional CPAN modules that implement
@@ -243,7 +249,7 @@ use Net::ACME::Registration                ();
 use Net::ACME::Utils                       ();
 use Net::ACME::X                           ();
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 *_to_base64url = \&MIME::Base64::encode_base64url;
 

@@ -1,5 +1,12 @@
 Revision history for Perl module Net::ACME
 
+0.16 Mon Mar 11 2018
+- No production changes.
+- Formally discourage use of this module in light of Let’s Encrypt’s EOL
+  announcement.
+- Fix example module.
+- Replace README.pod with README.md.
+
 0.15
 - Fix LICENSE file (again)
 

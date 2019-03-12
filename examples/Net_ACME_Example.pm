@@ -77,9 +77,9 @@ sub do_example {
                     last if $poll->status() eq 'valid';
 
                     if ( $poll->status() eq 'invalid' ) {
-                        my @failed = map { $_->error() } $poll->challenges();
+                        my @failed = map { $_->error() || () } $poll->challenges();
 
-                        print $_->to_string() . $/ for @failed;
+                        print( $_->to_string() . $/ ) for @failed;
 
                         die "Failed authorization for “$domain”!$/";
                     }
